@@ -32,19 +32,24 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="2">
+    <Units Count="3">
       <Unit0>
         <Filename Value="DebugTerminal.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="DebugTerminal"/>
       </Unit0>
       <Unit1>
         <Filename Value="fmain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FormMain"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FMain"/>
       </Unit1>
+      <Unit2>
+        <Filename Value="comport.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ComPort"/>
+      </Unit2>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
