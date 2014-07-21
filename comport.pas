@@ -1,4 +1,4 @@
-{ simple wrapper around serial.pps
+{ simple wrapper around serial.pp
 
   Copyright (C) 2014 Bernd Kreuss <prof7bit@gmail.com>
 
