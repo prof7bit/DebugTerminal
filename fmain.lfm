@@ -1,0 +1,84 @@
+object FormMain: TFormMain
+  Left = 518
+  Height = 523
+  Top = 217
+  Width = 508
+  Caption = 'Debug Terminal'
+  ClientHeight = 523
+  ClientWidth = 508
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 500
+  Position = poScreenCenter
+  LCLVersion = '1.3'
+  object PageControl: TPageControl
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 492
+    Top = 0
+    Width = 508
+    ActivePage = TsPlot
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabIndex = 1
+    TabOrder = 0
+    object TsTerminal: TTabSheet
+      Caption = 'Terminal'
+    end
+    object TsPlot: TTabSheet
+      Caption = 'Plot'
+    end
+  end
+  object ComboBox1: TComboBox
+    AnchorSideBottom.Side = asrBottom
+    Left = 40
+    Height = 23
+    Top = 496
+    Width = 124
+    Anchors = [akLeft, akBottom]
+    ItemHeight = 0
+    TabOrder = 1
+    Text = 'ComboBox1'
+  end
+  object Label1: TLabel
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 15
+    Top = 500
+    Width = 25
+    Anchors = [akLeft, akBottom]
+    Caption = 'Port'
+    ParentColor = False
+  end
+  object ComboBox2: TComboBox
+    AnchorSideBottom.Side = asrBottom
+    Left = 232
+    Height = 23
+    Top = 496
+    Width = 100
+    Anchors = [akLeft, akBottom]
+    ItemHeight = 0
+    TabOrder = 2
+    Text = 'ComboBox2'
+  end
+  object Label2: TLabel
+    AnchorSideBottom.Side = asrBottom
+    Left = 192
+    Height = 15
+    Top = 500
+    Width = 28
+    Anchors = [akLeft, akBottom]
+    Caption = 'Baud'
+    ParentColor = False
+  end
+  object TbConnect: TToggleBox
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 390
+    Height = 23
+    Top = 496
+    Width = 114
+    Anchors = [akRight, akBottom]
+    Caption = 'Connect'
+    TabOrder = 3
+  end
+end

@@ -1,0 +1,7 @@
+/backup
+/lib
+*.exe
+/DebugTerminal
+*.res
+*.lps
+
