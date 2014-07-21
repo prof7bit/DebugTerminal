@@ -28,10 +28,28 @@ type
   { TFormMain }
 
   TFormMain = class(TForm)
-    ComboBox1: TComboBox;
-    ComboBox2: TComboBox;
+    Btn1: TButton;
+    Btn2: TButton;
+    Btn3: TButton;
+    Btn4: TButton;
+    Btn5: TButton;
+    Btn6: TButton;
+    Btn7: TButton;
+    Btn8: TButton;
+    BtnCfg1: TButton;
+    BtnCfg2: TButton;
+    BtnCfg3: TButton;
+    BtnCfg4: TButton;
+    BtnCfg5: TButton;
+    BtnCfg6: TButton;
+    BtnCfg7: TButton;
+    BtnCfg8: TButton;
+    CbPort: TComboBox;
+    CbBaud: TComboBox;
+    TxtTX: TEdit;
     Label1: TLabel;
     Label2: TLabel;
+    TxtRX: TMemo;
     PageControl: TPageControl;
     TsTerminal: TTabSheet;
     TsPlot: TTabSheet;

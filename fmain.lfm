@@ -1,11 +1,11 @@
 object FormMain: TFormMain
-  Left = 518
-  Height = 523
-  Top = 217
-  Width = 508
+  Left = 308
+  Height = 500
+  Top = 220
+  Width = 500
   Caption = 'Debug Terminal'
-  ClientHeight = 523
-  ClientWidth = 508
+  ClientHeight = 500
+  ClientWidth = 500
   Constraints.MinHeight = 500
   Constraints.MinWidth = 500
   Position = poScreenCenter
@@ -14,57 +14,234 @@ object FormMain: TFormMain
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 492
+    Height = 469
     Top = 0
-    Width = 508
-    ActivePage = TsPlot
+    Width = 500
+    ActivePage = TsTerminal
     Anchors = [akTop, akLeft, akRight, akBottom]
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object TsTerminal: TTabSheet
       Caption = 'Terminal'
+      ClientHeight = 439
+      ClientWidth = 492
+      object TxtRX: TMemo
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Side = asrBottom
+        Left = 3
+        Height = 304
+        Top = 8
+        Width = 485
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        TabOrder = 0
+      end
+      object TxtTX: TEdit
+        AnchorSideBottom.Side = asrBottom
+        Left = 3
+        Height = 23
+        Top = 312
+        Width = 485
+        Anchors = [akLeft, akRight, akBottom]
+        TabOrder = 1
+      end
+      object Btn1: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 3
+        Height = 25
+        Top = 336
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn1'
+        TabOrder = 2
+      end
+      object BtnCfg1: TButton
+        Left = 144
+        Height = 25
+        Top = 336
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 3
+      end
+      object Btn2: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 3
+        Height = 25
+        Top = 360
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn2'
+        TabOrder = 4
+      end
+      object BtnCfg2: TButton
+        Left = 144
+        Height = 25
+        Top = 360
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 5
+      end
+      object Btn3: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 3
+        Height = 25
+        Top = 384
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn3'
+        TabOrder = 16
+      end
+      object BtnCfg3: TButton
+        Left = 144
+        Height = 25
+        Top = 384
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 17
+      end
+      object Btn4: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 3
+        Height = 25
+        Top = 408
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn4'
+        TabOrder = 6
+      end
+      object BtnCfg4: TButton
+        Left = 144
+        Height = 25
+        Top = 408
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 7
+      end
+      object Btn5: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 176
+        Height = 25
+        Top = 336
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn5'
+        TabOrder = 8
+      end
+      object BtnCfg5: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 317
+        Height = 25
+        Top = 336
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 9
+      end
+      object Btn6: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 176
+        Height = 25
+        Top = 360
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn6'
+        TabOrder = 10
+      end
+      object BtnCfg6: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 317
+        Height = 25
+        Top = 360
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 11
+      end
+      object Btn7: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 176
+        Height = 25
+        Top = 384
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn7'
+        TabOrder = 12
+      end
+      object BtnCfg7: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 317
+        Height = 25
+        Top = 384
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 13
+      end
+      object Btn8: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 176
+        Height = 25
+        Top = 408
+        Width = 139
+        Anchors = [akLeft, akBottom]
+        Caption = 'Btn8'
+        TabOrder = 14
+      end
+      object BtnCfg8: TButton
+        AnchorSideBottom.Side = asrBottom
+        Left = 317
+        Height = 25
+        Top = 408
+        Width = 24
+        Anchors = [akLeft, akBottom]
+        Caption = '...'
+        TabOrder = 15
+      end
     end
     object TsPlot: TTabSheet
       Caption = 'Plot'
     end
   end
-  object ComboBox1: TComboBox
+  object CbPort: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 40
-    Height = 23
-    Top = 496
+    Height = 24
+    Top = 472
     Width = 124
     Anchors = [akLeft, akBottom]
     ItemHeight = 0
+    Style = csDropDownList
     TabOrder = 1
-    Text = 'ComboBox1'
   end
   object Label1: TLabel
     AnchorSideBottom.Side = asrBottom
     Left = 10
     Height = 15
-    Top = 500
+    Top = 477
     Width = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Port'
     ParentColor = False
   end
-  object ComboBox2: TComboBox
+  object CbBaud: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 232
-    Height = 23
-    Top = 496
+    Height = 24
+    Top = 472
     Width = 100
     Anchors = [akLeft, akBottom]
     ItemHeight = 0
+    Style = csDropDownList
     TabOrder = 2
-    Text = 'ComboBox2'
   end
   object Label2: TLabel
     AnchorSideBottom.Side = asrBottom
     Left = 192
     Height = 15
-    Top = 500
+    Top = 477
     Width = 28
     Anchors = [akLeft, akBottom]
     Caption = 'Baud'
@@ -73,9 +250,9 @@ object FormMain: TFormMain
   object TbConnect: TToggleBox
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Side = asrBottom
-    Left = 390
+    Left = 382
     Height = 23
-    Top = 496
+    Top = 473
     Width = 114
     Anchors = [akRight, akBottom]
     Caption = 'Connect'
