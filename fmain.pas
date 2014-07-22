@@ -21,7 +21,8 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
+  ComPort;
 
 type
 
@@ -54,6 +55,8 @@ type
     TsTerminal: TTabSheet;
     TsPlot: TTabSheet;
     TbConnect: TToggleBox;
+    procedure CbPortGetItems(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { private declarations }
   public
@@ -66,6 +69,22 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TFormMain }
+
+procedure TFormMain.CbPortGetItems(Sender: TObject);
+var
+  sel: String;
+begin
+  sel := CbPort.Text;
+  EnumerateSerialPorts(CbPort.Items);
+  CbPort.Text := sel;
+end;
+
+procedure TFormMain.FormCreate(Sender: TObject);
+begin
+  EnumerateSerialPorts(CbPort.Items);
+end;
 
 end.
 
