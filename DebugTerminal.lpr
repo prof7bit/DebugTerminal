@@ -19,11 +19,12 @@ program DebugTerminal;
 {$mode objfpc}{$H+}
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  {$IFDEF UNIX}
   cthreads,
-  {$ENDIF}{$ENDIF}
+  {$ENDIF}
+  Debug,
   Interfaces, // this includes the LCL widgetset
-  Forms, FMain, ComPort
+  Forms, FMain, ComPort, serial_fpctrunk
   { you can add units after this };
 
 {$R *.res}

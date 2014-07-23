@@ -32,7 +32,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="5">
       <Unit0>
         <Filename Value="DebugTerminal.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -50,6 +50,14 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ComPort"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="serial_fpctrunk.pp"/>
+        <IsPartOfProject Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="debug.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

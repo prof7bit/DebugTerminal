@@ -30,8 +30,11 @@ interface
 uses
   {$ifdef windows}
   windows,
+  Serial_fpctrunk,
+  {$else}
+  Serial,
   {$endif}
-  Classes, sysutils, Serial;
+  Classes, sysutils;
 
 type
   { TComPort }
@@ -59,7 +62,7 @@ procedure EnumerateSerialPorts(List: TStrings);
 implementation
 
 {$ifdef linux}
-procedure EnumSerial_Linux(List: TStrings);
+procedure EnumSerial_Linux(List: TStringList);
 var
   SR: TSearchRec;
 begin
@@ -81,13 +84,13 @@ procedure EnumSerial_Windows(List: TStrings);
 var
   I: Integer;
   FN: String;
-  F: THandle;
+  F: LongInt;
 begin
   for I := 1 to 255 do begin
     FN := '\\.\COM' + IntToStr(I);
     F := CreateFile(PChar(FN), GENERIC_READ or GENERIC_WRITE, 0, nil,
       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-    if F = INVALID_HANDLE_VALUE then begin
+    if F <> -1 then begin
       FileClose(F);
       List.Append('COM' + IntToStr(I));
     end;
@@ -111,9 +114,9 @@ end;
 function ParityTypeFromChar(C: Char): TParityType;
 begin
   case C of
-    'N': Result := serial.NoneParity;
-    'O': Result := serial.OddParity;
-    'E': Result := serial.EvenParity;
+    'N': Result := NoneParity;
+    'O': Result := OddParity;
+    'E': Result := EvenParity;
   end;
 end;
 
@@ -165,32 +168,10 @@ begin
   Send(Text[1], Length(Text));
 end;
 
-{$ifdef windows}
-function TComPort.Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
-const
-  MILLISEC = 1/24/60/60/1000;
-var
-  BytesRead: LongWord;
-  StartTime: Double;
-begin
-  // serial.pp for windows is broken, it would need to be reworked to
-  // use overlapped io, until then the only way to implement a reliable
-  // read with timeout is to use polling :-(
-  StartTime := Now;
-  repeat
-    ReadFile(FHandle, RecvByte, 1, BytesRead, nil);
-    if BytesRead = 0 then
-      Sleep(1);
-  until (BytesRead <> 0) or (Now > StartTime + TimeoutMilli * MILLISEC);
-  Result := BytesRead;
-end;
-{$else}
 function TComPort.Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
 begin
-  Result := SerReadTimeout(FHandle, RecvByte, TimeoutMilli);
+  Result := SerReadTimeout(FHandle, RecvByte, 1);
 end;
-{$endif}
-
 
 procedure TComPort.Close;
 begin
@@ -201,4 +182,4 @@ begin
 end;
 
 end.
-
+

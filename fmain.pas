@@ -57,8 +57,10 @@ type
     TbConnect: TToggleBox;
     procedure CbPortGetItems(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure TbConnectChange(Sender: TObject);
   private
-    { private declarations }
+    ComPort: TComPort;
+    procedure UpdateConnectButton;
   public
     { public declarations }
   end;
@@ -84,6 +86,32 @@ end;
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
   EnumerateSerialPorts(CbPort.Items);
+  ComPort := TComPort.Create(self);
+end;
+
+procedure TFormMain.TbConnectChange(Sender: TObject);
+var
+  I: INteger;
+begin
+  if TbConnect.Checked then begin
+    ComPort.Open('\\.\' + CbPort.Text, StrToInt(CbBaud.Text), 8, 'N', 2);
+  end
+  else begin
+    ComPort.Close;
+  end;
+  UpdateConnectButton;
+end;
+
+procedure TFormMain.UpdateConnectButton;
+begin
+  if ComPort.IsOpen then begin
+    TbConnect.State := cbChecked;
+    TbConnect.Caption := 'Disconnect';
+  end
+  else begin
+    TbConnect.State := cbUnchecked;
+    TbConnect.Caption := 'Connect';
+  end;
 end;
 
 end.
