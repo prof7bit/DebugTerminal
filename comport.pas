@@ -84,16 +84,16 @@ procedure EnumSerial_Windows(List: TStrings);
 var
   I: Integer;
   FN: String;
-  F: LongInt;
+  F: THandle;
 begin
   for I := 1 to 255 do begin
     FN := '\\.\COM' + IntToStr(I);
     F := CreateFile(PChar(FN), GENERIC_READ or GENERIC_WRITE, 0, nil,
       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-    if F <> -1 then begin
-      FileClose(F);
+    if GetLastOSError <> ERROR_FILE_NOT_FOUND then
       List.Append('COM' + IntToStr(I));
-    end;
+    if F <> INVALID_HANDLE_VALUE then
+      FileClose(F);
   end;
 end;
 {$endif}
