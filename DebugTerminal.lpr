@@ -24,8 +24,7 @@ uses
   {$ENDIF}
   Debug,
   Interfaces, // this includes the LCL widgetset
-  Forms, FMain, ComPort, serial_fpctrunk
-  { you can add units after this };
+  Forms, FMain, ComPort, FConfigButton;
 
 {$R *.res}
 
@@ -33,6 +32,7 @@ begin
   RequireDerivedFormResource := True;
   Application.Initialize;
   Application.CreateForm(TFormMain, FormMain);
+  Application.CreateForm(TFormConfigButton, FormConfigButton);
   Application.Run;
 end.
 

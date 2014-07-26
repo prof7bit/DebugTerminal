@@ -32,7 +32,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="5">
+    <Units Count="6">
       <Unit0>
         <Filename Value="DebugTerminal.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -53,11 +53,19 @@
       <Unit3>
         <Filename Value="serial_fpctrunk.pp"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Serial_fpctrunk"/>
       </Unit3>
       <Unit4>
         <Filename Value="debug.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit4>
+      <Unit5>
+        <Filename Value="fconfigbutton.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormConfigButton"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="FConfigButton"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

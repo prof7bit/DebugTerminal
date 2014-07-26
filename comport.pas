@@ -62,7 +62,7 @@ procedure EnumerateSerialPorts(List: TStrings);
 implementation
 
 {$ifdef linux}
-procedure EnumSerial_Linux(List: TStringList);
+procedure EnumSerial_Linux(List: TStrings);
 var
   SR: TSearchRec;
 begin
@@ -182,4 +182,4 @@ begin
 end;
 
 end.
-
+

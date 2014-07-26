@@ -24,13 +24,13 @@ object FormMain: TFormMain
     TabOrder = 0
     object TsTerminal: TTabSheet
       Caption = 'Terminal'
-      ClientHeight = 441
+      ClientHeight = 439
       ClientWidth = 492
       object TxtRX: TMemo
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Side = asrBottom
         Left = 3
-        Height = 306
+        Height = 304
         Top = 8
         Width = 485
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -40,16 +40,17 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 3
         Height = 23
-        Top = 314
+        Top = 312
         Width = 485
         Anchors = [akLeft, akRight, akBottom]
         TabOrder = 1
       end
       object Btn1: TButton
+        Tag = 1
         AnchorSideBottom.Side = asrBottom
         Left = 3
         Height = 25
-        Top = 338
+        Top = 336
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn1'
@@ -58,17 +59,19 @@ object FormMain: TFormMain
       object BtnCfg1: TButton
         Left = 144
         Height = 25
-        Top = 338
+        Top = 336
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg1Click
         TabOrder = 3
       end
       object Btn2: TButton
+        Tag = 2
         AnchorSideBottom.Side = asrBottom
         Left = 3
         Height = 25
-        Top = 362
+        Top = 360
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn2'
@@ -77,17 +80,19 @@ object FormMain: TFormMain
       object BtnCfg2: TButton
         Left = 144
         Height = 25
-        Top = 362
+        Top = 360
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg2Click
         TabOrder = 5
       end
       object Btn3: TButton
+        Tag = 3
         AnchorSideBottom.Side = asrBottom
         Left = 3
         Height = 25
-        Top = 386
+        Top = 384
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn3'
@@ -96,17 +101,19 @@ object FormMain: TFormMain
       object BtnCfg3: TButton
         Left = 144
         Height = 25
-        Top = 386
+        Top = 384
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg3Click
         TabOrder = 17
       end
       object Btn4: TButton
+        Tag = 4
         AnchorSideBottom.Side = asrBottom
         Left = 3
         Height = 25
-        Top = 410
+        Top = 408
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn4'
@@ -115,17 +122,19 @@ object FormMain: TFormMain
       object BtnCfg4: TButton
         Left = 144
         Height = 25
-        Top = 410
+        Top = 408
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg4Click
         TabOrder = 7
       end
       object Btn5: TButton
+        Tag = 5
         AnchorSideBottom.Side = asrBottom
         Left = 176
         Height = 25
-        Top = 338
+        Top = 336
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn5'
@@ -135,17 +144,19 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 317
         Height = 25
-        Top = 338
+        Top = 336
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg5Click
         TabOrder = 9
       end
       object Btn6: TButton
+        Tag = 6
         AnchorSideBottom.Side = asrBottom
         Left = 176
         Height = 25
-        Top = 362
+        Top = 360
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn6'
@@ -155,17 +166,19 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 317
         Height = 25
-        Top = 362
+        Top = 360
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg6Click
         TabOrder = 11
       end
       object Btn7: TButton
+        Tag = 7
         AnchorSideBottom.Side = asrBottom
         Left = 176
         Height = 25
-        Top = 386
+        Top = 384
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn7'
@@ -175,17 +188,19 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 317
         Height = 25
-        Top = 386
+        Top = 384
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg7Click
         TabOrder = 13
       end
       object Btn8: TButton
+        Tag = 8
         AnchorSideBottom.Side = asrBottom
         Left = 176
         Height = 25
-        Top = 410
+        Top = 408
         Width = 139
         Anchors = [akLeft, akBottom]
         Caption = 'Btn8'
@@ -195,10 +210,11 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 317
         Height = 25
-        Top = 410
+        Top = 408
         Width = 24
         Anchors = [akLeft, akBottom]
         Caption = '...'
+        OnClick = BtnCfg8Click
         TabOrder = 15
       end
     end
@@ -209,11 +225,11 @@ object FormMain: TFormMain
   object CbPort: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 40
-    Height = 23
-    Top = 473
+    Height = 24
+    Top = 472
     Width = 124
     Anchors = [akLeft, akBottom]
-    ItemHeight = 15
+    ItemHeight = 0
     OnGetItems = CbPortGetItems
     Style = csDropDownList
     TabOrder = 1
@@ -223,7 +239,7 @@ object FormMain: TFormMain
     Left = 10
     Height = 15
     Top = 477
-    Width = 22
+    Width = 25
     Anchors = [akLeft, akBottom]
     Caption = 'Port'
     ParentColor = False
@@ -231,11 +247,11 @@ object FormMain: TFormMain
   object CbBaud: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 232
-    Height = 23
-    Top = 473
+    Height = 24
+    Top = 472
     Width = 100
     Anchors = [akLeft, akBottom]
-    ItemHeight = 15
+    ItemHeight = 0
     ItemIndex = 12
     Items.Strings = (
       '50'
@@ -266,7 +282,7 @@ object FormMain: TFormMain
     Left = 192
     Height = 15
     Top = 477
-    Width = 27
+    Width = 28
     Anchors = [akLeft, akBottom]
     Caption = 'Baud'
     ParentColor = False
@@ -282,5 +298,11 @@ object FormMain: TFormMain
     Caption = 'Connect'
     OnChange = TbConnectChange
     TabOrder = 3
+  end
+  object IniProp: TIniPropStorage
+    StoredValues = <>
+    IniFileName = 'DebugTerminal.ini'
+    left = 80
+    top = 72
   end
 end

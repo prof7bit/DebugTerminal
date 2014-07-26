@@ -21,8 +21,8 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ComPort;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
+  ComPort, FConfigButton;
 
 type
 
@@ -47,6 +47,7 @@ type
     BtnCfg8: TButton;
     CbPort: TComboBox;
     CbBaud: TComboBox;
+    IniProp: TIniPropStorage;
     TxtTX: TEdit;
     Label1: TLabel;
     Label2: TLabel;
@@ -55,12 +56,22 @@ type
     TsTerminal: TTabSheet;
     TsPlot: TTabSheet;
     TbConnect: TToggleBox;
+    procedure BtnCfg1Click(Sender: TObject);
+    procedure BtnCfg2Click(Sender: TObject);
+    procedure BtnCfg3Click(Sender: TObject);
+    procedure BtnCfg4Click(Sender: TObject);
+    procedure BtnCfg5Click(Sender: TObject);
+    procedure BtnCfg6Click(Sender: TObject);
+    procedure BtnCfg7Click(Sender: TObject);
+    procedure BtnCfg8Click(Sender: TObject);
     procedure CbPortGetItems(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure TbConnectChange(Sender: TObject);
   private
     ComPort: TComPort;
     procedure UpdateConnectButton;
+    function GetSequence(AButton: TButton): String;
+    procedure ConfigButton(AButton: TButton);
   public
     { public declarations }
   end;
@@ -83,15 +94,65 @@ begin
   CbPort.Text := sel;
 end;
 
+procedure TFormMain.BtnCfg1Click(Sender: TObject);
+begin
+  ConfigButton(Btn1);
+end;
+
+procedure TFormMain.BtnCfg2Click(Sender: TObject);
+begin
+  ConfigButton(Btn2);
+end;
+
+procedure TFormMain.BtnCfg3Click(Sender: TObject);
+begin
+  ConfigButton(Btn3);
+end;
+
+procedure TFormMain.BtnCfg4Click(Sender: TObject);
+begin
+  ConfigButton(Btn4);
+end;
+
+procedure TFormMain.BtnCfg5Click(Sender: TObject);
+begin
+  ConfigButton(Btn5);
+end;
+
+procedure TFormMain.BtnCfg6Click(Sender: TObject);
+begin
+  ConfigButton(Btn6);
+end;
+
+procedure TFormMain.BtnCfg7Click(Sender: TObject);
+begin
+  ConfigButton(Btn7);
+end;
+
+procedure TFormMain.BtnCfg8Click(Sender: TObject);
+begin
+  ConfigButton(Btn8);
+end;
+
 procedure TFormMain.FormCreate(Sender: TObject);
+var
+  I: Integer;
+  B: TControl;
 begin
   EnumerateSerialPorts(CbPort.Items);
   ComPort := TComPort.Create(self);
+  IniProp.IniSection := 'Buttons';
+  for I := 0 to TsTerminal.ControlCount - 1 do begin
+    B := TsTerminal.Controls[I];
+    if B is TButton then begin
+      if (B.Tag > 0) and (B.Tag < 9) then begin
+        B.Caption := IniProp.ReadString('Name' + IntToStr(B.Tag), 'Button ' + IntToStr(B.Tag));
+      end;
+    end;
+  end;
 end;
 
 procedure TFormMain.TbConnectChange(Sender: TObject);
-var
-  I: INteger;
 begin
   if TbConnect.Checked then begin
     ComPort.Open('\\.\' + CbPort.Text, StrToInt(CbBaud.Text), 8, 'N', 2);
@@ -112,6 +173,23 @@ begin
     TbConnect.State := cbUnchecked;
     TbConnect.Caption := 'Connect';
   end;
+end;
+
+function TFormMain.GetSequence(AButton: TButton): String;
+begin
+  // sequence in the ini is always hex encoded
+  IniProp.IniSection := 'Buttons';
+  Result := IniProp.ReadString('Name' + IntToStr(AButton.Tag), '');
+end;
+
+procedure TFormMain.ConfigButton(AButton: TButton);
+begin
+  AButton.Font.Bold := True;
+  FormConfigButton.IniProp := IniProp;
+  FormConfigButton.Button := AButton;
+  FormConfigButton.ShowModal;
+  AButton.Font.Bold := False;
+  IniProp.Save;
 end;
 
 end.
