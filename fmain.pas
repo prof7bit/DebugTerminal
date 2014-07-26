@@ -21,7 +21,7 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, SynMemo, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
   ComPort, FConfigButton, LCLType, ExtCtrls, SynEdit, SynEditKeyCmds, syncobjs;
 
 type
@@ -261,8 +261,6 @@ end;
 procedure TFormMain.OutputAddByte(B: Byte);
 var
   S: String;
-  Lines: TStrings;
-  L: Integer;
 begin
   S := IntToHex(B, 2) + ' ';
   // S := Format('%3d ', [B]);
