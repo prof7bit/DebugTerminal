@@ -37,9 +37,9 @@ uses
   Classes, sysutils;
 
 type
-  { TComPort }
+  { TSimpleComPort }
 
-  TComPort = class(TComponent)
+  TSimpleComPort = class(TComponent)
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -120,21 +120,21 @@ begin
   end;
 end;
 
-{ TComPort }
+{ TSimpleComPort }
 
-constructor TComPort.Create(AOwner: TComponent);
+constructor TSimpleComPort.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FIsOpen := False;
 end;
 
-destructor TComPort.Destroy;
+destructor TSimpleComPort.Destroy;
 begin
   Close;
   inherited Destroy;
 end;
 
-function TComPort.Open(Port: String; Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer): Boolean;
+function TSimpleComPort.Open(Port: String; Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer): Boolean;
 begin
   if IsOpen then
     Result := True
@@ -153,12 +153,12 @@ begin
   end;
 end;
 
-procedure TComPort.Send(B: Byte);
+procedure TSimpleComPort.Send(B: Byte);
 begin
   Send(B, 1);
 end;
 
-procedure TComPort.Send(var Buffer; Count: LongInt);
+procedure TSimpleComPort.Send(var Buffer; Count: LongInt);
 begin
   if IsOpen then begin
     SerWrite(FHandle, Buffer, Count);
@@ -166,17 +166,17 @@ begin
   end;
 end;
 
-procedure TComPort.Send(Text: String);
+procedure TSimpleComPort.Send(Text: String);
 begin
   Send(Text[1], Length(Text));
 end;
 
-function TComPort.Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
+function TSimpleComPort.Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
 begin
   Result := SerReadTimeout(FHandle, RecvByte, TimeoutMilli);
 end;
 
-procedure TComPort.Close;
+procedure TSimpleComPort.Close;
 begin
   if FIsOpen then begin
     SerClose(FHandle);

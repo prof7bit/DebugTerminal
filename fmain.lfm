@@ -43,6 +43,8 @@ object FormMain: TFormMain
         Top = 312
         Width = 485
         Anchors = [akLeft, akRight, akBottom]
+        Enabled = False
+        OnKeyDown = TxtTXKeyDown
         TabOrder = 1
       end
       object Btn1: TButton

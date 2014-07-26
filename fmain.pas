@@ -22,7 +22,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
-  ComPort, FConfigButton;
+  ComPort, FConfigButton, LCLType;
 
 type
 
@@ -69,11 +69,13 @@ type
     procedure CbPortGetItems(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure TbConnectChange(Sender: TObject);
+    procedure TxtTXKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
-    ComPort: TComPort;
+    ComPort: TSimpleComPort;
     procedure UpdateConnectButton;
     function GetSequence(AButton: TButton): String;
     procedure ConfigButton(AButton: TButton);
+    function SendHex(S: String): Boolean;
   public
     { public declarations }
   end;
@@ -156,7 +158,7 @@ var
   B: TControl;
 begin
   EnumerateSerialPorts(CbPort.Items);
-  ComPort := TComPort.Create(self);
+  ComPort := TSimpleComPort.Create(self);
   IniProp.IniSection := 'Buttons';
   for I := 0 to TsTerminal.ControlCount - 1 do begin
     B := TsTerminal.Controls[I];
@@ -182,6 +184,15 @@ begin
   UpdateConnectButton;
 end;
 
+procedure TFormMain.TxtTXKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_RETURN then begin
+    if SendHex(TxtTX.Text) then begin
+      TxtTX.Text := '';
+    end;
+  end;
+end;
+
 procedure TFormMain.UpdateConnectButton;
 begin
   if ComPort.IsOpen then begin
@@ -192,6 +203,7 @@ begin
     TbConnect.State := cbUnchecked;
     TbConnect.Caption := 'Connect';
   end;
+  TxtTX.Enabled := ComPort.IsOpen;
 end;
 
 function TFormMain.GetSequence(AButton: TButton): String;
@@ -209,6 +221,21 @@ begin
   FormConfigButton.ShowModal;
   AButton.Font.Bold := False;
   IniProp.Save;
+end;
+
+function TFormMain.SendHex(S: String): Boolean;
+var
+  L: Integer;
+  Buf: PChar;
+begin
+  Result := False;
+  L := Length(S) div 2;
+  Getmem(Buf, L);
+  if HexToBin(PChar(S), Buf, L) = L then begin
+    ComPort.Send(Buf^, L);
+    Result := True;
+  end;
+  Freemem(Buf);
 end;
 
 end.
