@@ -26,6 +26,8 @@ uses
 
 type
 
+  TReceiver = class;
+
   { TFormMain }
 
   TFormMain = class(TForm)
@@ -67,17 +69,28 @@ type
     procedure CbBaudChange(Sender: TObject);
     procedure CbPortChange(Sender: TObject);
     procedure CbPortGetItems(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure TbConnectChange(Sender: TObject);
     procedure TxtTXKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure AddRXText(S: String);
   private
-    ComPort: TSimpleComPort;
+    Receiver: TReceiver;
     procedure UpdateConnectButton;
     function GetSequence(AButton: TButton): String;
     procedure ConfigButton(AButton: TButton);
     function SendHex(S: String): Boolean;
   public
-    { public declarations }
+    ComPort: TSimpleComPort;
+  end;
+
+  { TReceiver }
+
+  TReceiver = class(TThread)
+    ReceiveByte: Byte;
+    constructor Create();
+    procedure Execute; override;
+    procedure SyncOnReceive;
   end;
 
 var
@@ -86,6 +99,27 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TReceiver }
+
+constructor TReceiver.Create;
+begin
+  inherited Create(False);
+end;
+
+procedure TReceiver.Execute;
+begin
+  repeat
+    if FormMain.ComPort.Receice(1, ReceiveByte) = 1 then begin
+      Synchronize(@SyncOnReceive);
+    end;
+  until Terminated;
+end;
+
+procedure TReceiver.SyncOnReceive;
+begin
+  FormMain.AddRXText(IntToHex(ReceiveByte, 2) + ' ');
+end;
 
 { TFormMain }
 
@@ -96,6 +130,13 @@ begin
   sel := CbPort.Text;
   EnumerateSerialPorts(CbPort.Items);
   CbPort.Text := sel;
+end;
+
+procedure TFormMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  Receiver.Terminate;
+  Receiver.WaitFor;
+  Receiver.Free;
 end;
 
 procedure TFormMain.BtnCfg1Click(Sender: TObject);
@@ -171,6 +212,7 @@ begin
   IniProp.IniSection := 'Serial';
   CbPort.Text := IniProp.ReadString('Port', '');
   CbBaud.Text := IniProp.ReadString('Baud', '9600');
+  Receiver := TReceiver.Create;
 end;
 
 procedure TFormMain.TbConnectChange(Sender: TObject);
@@ -193,6 +235,11 @@ begin
   end;
 end;
 
+procedure TFormMain.AddRXText(S: String);
+begin
+  TxtRX.Text := TxtRX.Text + S;
+end;
+
 procedure TFormMain.UpdateConnectButton;
 begin
   if ComPort.IsOpen then begin
@@ -202,6 +249,7 @@ begin
   else begin
     TbConnect.State := cbUnchecked;
     TbConnect.Caption := 'Connect';
+    AddRXText(LineEnding);
   end;
   TxtTX.Enabled := ComPort.IsOpen;
 end;

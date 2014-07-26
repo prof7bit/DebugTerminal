@@ -8,6 +8,7 @@ object FormMain: TFormMain
   ClientWidth = 500
   Constraints.MinHeight = 500
   Constraints.MinWidth = 500
+  OnClose = FormClose
   OnCreate = FormCreate
   Position = poScreenCenter
   LCLVersion = '1.3'
