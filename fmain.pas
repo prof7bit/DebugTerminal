@@ -21,8 +21,8 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
-  ComPort, FConfigButton, LCLType;
+  Classes, SysUtils, FileUtil, SynMemo, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
+  ComPort, FConfigButton, LCLType, ExtCtrls, SynEdit, SynEditKeyCmds, syncobjs;
 
 type
 
@@ -50,10 +50,11 @@ type
     CbPort: TComboBox;
     CbBaud: TComboBox;
     IniProp: TIniPropStorage;
-    TxtTX: TEdit;
+    FOutput: TSynEdit;
+    Timer: TTimer;
+    FInput: TEdit;
     Label1: TLabel;
     Label2: TLabel;
-    TxtRX: TMemo;
     PageControl: TPageControl;
     TsTerminal: TTabSheet;
     TsPlot: TTabSheet;
@@ -72,8 +73,9 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure TbConnectChange(Sender: TObject);
-    procedure TxtTXKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure AddRXText(S: String);
+    procedure TimerTimer(Sender: TObject);
+    procedure FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure OutputAddByte(B: Byte);
   private
     Receiver: TReceiver;
     procedure UpdateConnectButton;
@@ -82,6 +84,9 @@ type
     function SendHex(S: String): Boolean;
   public
     ComPort: TSimpleComPort;
+    RxLock: TCriticalSection;
+    RxBuf: String;
+    RxByteColumn: Integer;
   end;
 
   { TReceiver }
@@ -90,7 +95,6 @@ type
     ReceiveByte: Byte;
     constructor Create();
     procedure Execute; override;
-    procedure SyncOnReceive;
   end;
 
 var
@@ -110,15 +114,17 @@ end;
 procedure TReceiver.Execute;
 begin
   repeat
-    if FormMain.ComPort.Receice(1, ReceiveByte) = 1 then begin
-      Synchronize(@SyncOnReceive);
+    if FormMain.ComPort.IsOpen then begin
+      if FormMain.ComPort.Receice(50, ReceiveByte) = 1 then begin
+        FormMain.RxLock.Acquire;
+        FormMain.RxBuf += Chr(ReceiveByte);
+        FormMain.RxLock.Release;
+      end
+    end
+    else begin
+      Sleep(1);
     end;
   until Terminated;
-end;
-
-procedure TReceiver.SyncOnReceive;
-begin
-  FormMain.AddRXText(IntToHex(ReceiveByte, 2) + ' ');
 end;
 
 { TFormMain }
@@ -137,6 +143,7 @@ begin
   Receiver.Terminate;
   Receiver.WaitFor;
   Receiver.Free;
+  RxLock.Free;
 end;
 
 procedure TFormMain.BtnCfg1Click(Sender: TObject);
@@ -209,9 +216,11 @@ begin
       end;
     end;
   end;
+  RxByteColumn := 0;
   IniProp.IniSection := 'Serial';
   CbPort.Text := IniProp.ReadString('Port', '');
   CbBaud.Text := IniProp.ReadString('Baud', '9600');
+  RxLock := TCriticalSection.Create;
   Receiver := TReceiver.Create;
 end;
 
@@ -226,18 +235,47 @@ begin
   UpdateConnectButton;
 end;
 
-procedure TFormMain.TxtTXKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TFormMain.TimerTimer(Sender: TObject);
+var
+  C: Char;
+begin
+  RxLock.Acquire;
+  FOutput.BeginUpdate(False);
+  for C in RxBuf do begin
+    OutputAddByte(Ord(C));
+  end;
+  FOutput.EndUpdate;
+  RxBuf := '';
+  RxLock.Release;
+end;
+
+procedure TFormMain.FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_RETURN then begin
-    if SendHex(TxtTX.Text) then begin
-      TxtTX.Text := '';
+    if SendHex(FInput.Text) then begin
+      FInput.Text := '';
     end;
   end;
 end;
 
-procedure TFormMain.AddRXText(S: String);
+procedure TFormMain.OutputAddByte(B: Byte);
+var
+  S: String;
+  Lines: TStrings;
+  L: Integer;
 begin
-  TxtRX.Text := TxtRX.Text + S;
+  S := IntToHex(B, 2) + ' ';
+  // S := Format('%3d ', [B]);
+  FOutput.ExecuteCommand(ecEditorBottom, '', nil);
+  FOutput.InsertTextAtCaret(S);
+  RxByteColumn += 1;
+  if RxByteColumn = 8 then begin
+    FOutput.InsertTextAtCaret('  ');
+  end;
+  if RxByteColumn = 16 then begin
+    RxByteColumn := 0;
+    FOutput.InsertTextAtCaret(LineEnding);
+  end;
 end;
 
 procedure TFormMain.UpdateConnectButton;
@@ -249,9 +287,8 @@ begin
   else begin
     TbConnect.State := cbUnchecked;
     TbConnect.Caption := 'Connect';
-    AddRXText(LineEnding);
   end;
-  TxtTX.Enabled := ComPort.IsOpen;
+  FInput.Enabled := ComPort.IsOpen;
 end;
 
 function TFormMain.GetSequence(AButton: TButton): String;
