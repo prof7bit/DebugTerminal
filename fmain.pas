@@ -155,7 +155,7 @@ end;
 procedure TFormMain.TbConnectChange(Sender: TObject);
 begin
   if TbConnect.Checked then begin
-    ComPort.Open('\\.\' + CbPort.Text, StrToInt(CbBaud.Text), 8, 'N', 2);
+    ComPort.Open(CbPort.Text, StrToInt(CbBaud.Text), 8, 'N', 2);
   end
   else begin
     ComPort.Close;

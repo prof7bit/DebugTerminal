@@ -139,6 +139,9 @@ begin
   if IsOpen then
     Result := True
   else begin
+    {$ifdef windows}
+    Port := '\\.\' + Port;
+    {$endif}
     FHandle := SerOpen(Port);
     if FHandle <> 0 then begin
       SerSetParams(FHandle, Baud, Bits, ParityTypeFromChar(Parity), StopBits, []);
