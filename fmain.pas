@@ -47,8 +47,10 @@ type
     BtnCfg6: TButton;
     BtnCfg7: TButton;
     BtnCfg8: TButton;
+    CbEncodingRecv: TComboBox;
     CbPort: TComboBox;
     CbBaud: TComboBox;
+    CbEncodingSend: TComboBox;
     IniProp: TIniPropStorage;
     FOutput: TSynEdit;
     Timer: TTimer;
@@ -68,6 +70,8 @@ type
     procedure BtnCfg7Click(Sender: TObject);
     procedure BtnCfg8Click(Sender: TObject);
     procedure CbBaudChange(Sender: TObject);
+    procedure CbEncodingRecvChange(Sender: TObject);
+    procedure CbEncodingSendChange(Sender: TObject);
     procedure CbPortChange(Sender: TObject);
     procedure CbPortGetItems(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -76,12 +80,15 @@ type
     procedure TimerTimer(Sender: TObject);
     procedure FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OutputAddByte(B: Byte);
+    procedure OutputLineBreak;
   private
     Receiver: TReceiver;
     procedure UpdateConnectButton;
     function GetSequence(AButton: TButton): String;
     procedure ConfigButton(AButton: TButton);
     function SendHex(S: String): Boolean;
+    procedure IniWrite(Section, Key, Value: String);
+    function IniRead(Section, Key, DefaultValue: String): String;
   public
     ComPort: TSimpleComPort;
     RxLock: TCriticalSection;
@@ -103,6 +110,20 @@ var
 implementation
 
 {$R *.lfm}
+
+function ByteToBinary(B: Byte): String;
+var
+  I: Integer;
+begin
+  SetLength(Result, 8);
+  for I := 1 to 8 do begin
+    if B and $80 <> 0 then
+      Result[I] := '1'
+    else
+      Result[I] := '0';
+    B := B shl 1;
+  end;
+end;
 
 { TReceiver }
 
@@ -188,16 +209,22 @@ end;
 
 procedure TFormMain.CbBaudChange(Sender: TObject);
 begin
-  IniProp.IniSection := 'Serial';
-  IniProp.WriteString('Baud', CbBaud.Text);
-  IniProp.Save;
+  IniWrite('Serial', 'Baud', CbBaud.Text);
+end;
+
+procedure TFormMain.CbEncodingRecvChange(Sender: TObject);
+begin
+  IniWrite('Encoding', 'Receive', CbEncodingRecv.Text);
+end;
+
+procedure TFormMain.CbEncodingSendChange(Sender: TObject);
+begin
+  IniWrite('Encoding', 'Send', CbEncodingSend.Text);
 end;
 
 procedure TFormMain.CbPortChange(Sender: TObject);
 begin
-  IniProp.IniSection := 'Serial';
-  IniProp.WriteString('Port', CbPort.Text);
-  IniProp.Save;
+  IniWrite('Serial', 'Port', CbPort.Text);
 end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
@@ -217,9 +244,10 @@ begin
     end;
   end;
   RxByteColumn := 0;
-  IniProp.IniSection := 'Serial';
-  CbPort.Text := IniProp.ReadString('Port', '');
-  CbBaud.Text := IniProp.ReadString('Baud', '9600');
+  CbPort.Text := IniRead('Serial', 'Port', '');
+  CbBaud.Text := IniRead('Serial', 'Baud', '9600');
+  CbEncodingRecv.Text := IniRead('Encoding', 'Receive', 'Hex');
+  CbEncodingSend.Text := IniRead('Encoding', 'Send', 'Hex');
   RxLock := TCriticalSection.Create;
   Receiver := TReceiver.Create;
 end;
@@ -261,19 +289,40 @@ end;
 procedure TFormMain.OutputAddByte(B: Byte);
 var
   S: String;
+  L1, L2: Integer;
 begin
-  S := IntToHex(B, 2) + ' ';
-  // S := Format('%3d ', [B]);
+  L1 := 8;
+  L2 := 16;
+  case CbEncodingRecv.Text of
+    'Hex': S := IntToHex(B, 2) + ' ';
+    'Dec': S := Format('%3d ', [B]);
+    'ASCII': begin
+      S := Chr(B);
+      L1 := 0;
+      L2 := 200;
+    end;
+    'Bin': begin
+      S := ByteToBinary(B) + ' ';
+      L1 := 4;
+      L2 := 8;
+    end;
+  end;
   FOutput.ExecuteCommand(ecEditorBottom, '', nil);
   FOutput.InsertTextAtCaret(S);
   RxByteColumn += 1;
-  if RxByteColumn = 8 then begin
+  if RxByteColumn = L1 then begin
     FOutput.InsertTextAtCaret('  ');
   end;
-  if RxByteColumn = 16 then begin
-    RxByteColumn := 0;
-    FOutput.InsertTextAtCaret(LineEnding);
+  if RxByteColumn >= L2 then begin
+    OutputLineBreak;
   end;
+end;
+
+procedure TFormMain.OutputLineBreak;
+begin
+  FOutput.ExecuteCommand(ecEditorBottom, '', nil);
+  FOutput.InsertTextAtCaret(LineEnding);
+  RxByteColumn := 0;
 end;
 
 procedure TFormMain.UpdateConnectButton;
@@ -281,6 +330,8 @@ begin
   if ComPort.IsOpen then begin
     TbConnect.State := cbChecked;
     TbConnect.Caption := 'Disconnect';
+    OutputLineBreak;
+    OutputLineBreak;
   end
   else begin
     TbConnect.State := cbUnchecked;
@@ -319,6 +370,19 @@ begin
     Result := True;
   end;
   Freemem(Buf);
+end;
+
+procedure TFormMain.IniWrite(Section, Key, Value: String);
+begin
+  IniProp.IniSection := Section;
+  IniProp.WriteString(Key, Value);
+  IniProp.Save;
+end;
+
+function TFormMain.IniRead(Section, Key, DefaultValue: String): String;
+begin
+  IniProp.IniSection := Section;
+  Result := IniProp.ReadString(Key, DefaultValue);
 end;
 
 end.
