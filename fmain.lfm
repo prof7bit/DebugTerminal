@@ -230,6 +230,7 @@ object FormMain: TFormMain
     Width = 124
     Anchors = [akLeft, akBottom]
     ItemHeight = 0
+    OnChange = CbPortChange
     OnGetItems = CbPortGetItems
     Style = csDropDownList
     TabOrder = 1
@@ -248,7 +249,7 @@ object FormMain: TFormMain
     AnchorSideBottom.Side = asrBottom
     Left = 232
     Height = 24
-    Top = 472
+    Top = 473
     Width = 100
     Anchors = [akLeft, akBottom]
     ItemHeight = 0
@@ -273,6 +274,7 @@ object FormMain: TFormMain
       '115200'
       '230400'
     )
+    OnChange = CbBaudChange
     Style = csDropDownList
     TabOrder = 2
     Text = '9600'

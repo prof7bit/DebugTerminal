@@ -64,6 +64,8 @@ type
     procedure BtnCfg6Click(Sender: TObject);
     procedure BtnCfg7Click(Sender: TObject);
     procedure BtnCfg8Click(Sender: TObject);
+    procedure CbBaudChange(Sender: TObject);
+    procedure CbPortChange(Sender: TObject);
     procedure CbPortGetItems(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure TbConnectChange(Sender: TObject);
@@ -134,6 +136,20 @@ begin
   ConfigButton(Btn8);
 end;
 
+procedure TFormMain.CbBaudChange(Sender: TObject);
+begin
+  IniProp.IniSection := 'Serial';
+  IniProp.WriteString('Baud', CbBaud.Text);
+  IniProp.Save;
+end;
+
+procedure TFormMain.CbPortChange(Sender: TObject);
+begin
+  IniProp.IniSection := 'Serial';
+  IniProp.WriteString('Port', CbPort.Text);
+  IniProp.Save;
+end;
+
 procedure TFormMain.FormCreate(Sender: TObject);
 var
   I: Integer;
@@ -150,6 +166,9 @@ begin
       end;
     end;
   end;
+  IniProp.IniSection := 'Serial';
+  CbPort.Text := IniProp.ReadString('Port', '');
+  CbBaud.Text := IniProp.ReadString('Baud', '9600');
 end;
 
 procedure TFormMain.TbConnectChange(Sender: TObject);

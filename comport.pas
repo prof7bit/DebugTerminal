@@ -143,7 +143,7 @@ begin
     Port := '\\.\' + Port;
     {$endif}
     FHandle := SerOpen(Port);
-    if FHandle <> 0 then begin
+    if FHandle <> THandle(-1) then begin
       SerSetParams(FHandle, Baud, Bits, ParityTypeFromChar(Parity), StopBits, []);
       Result := True;
       FIsOpen := True;
@@ -173,7 +173,7 @@ end;
 
 function TComPort.Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
 begin
-  Result := SerReadTimeout(FHandle, RecvByte, 1);
+  Result := SerReadTimeout(FHandle, RecvByte, TimeoutMilli);
 end;
 
 procedure TComPort.Close;
