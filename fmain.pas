@@ -83,6 +83,14 @@ type
     TsTerminal: TTabSheet;
     TsPlot: TTabSheet;
     TbConnect: TToggleBox;
+    procedure Btn1Click(Sender: TObject);
+    procedure Btn2Click(Sender: TObject);
+    procedure Btn3Click(Sender: TObject);
+    procedure Btn4Click(Sender: TObject);
+    procedure Btn5Click(Sender: TObject);
+    procedure Btn6Click(Sender: TObject);
+    procedure Btn7Click(Sender: TObject);
+    procedure Btn8Click(Sender: TObject);
     procedure BtnCfg1Click(Sender: TObject);
     procedure BtnCfg2Click(Sender: TObject);
     procedure BtnCfg3Click(Sender: TObject);
@@ -112,6 +120,7 @@ type
     function SendHex(S: String): Boolean;
     procedure IniWrite(Section, Key, Value: String);
     function IniRead(Section, Key, DefaultValue: String): String;
+    procedure DoButtonAction(B: TButton);
   public
     ComPort: TSimpleComPort;
     RxLock: TCriticalSection;
@@ -296,6 +305,46 @@ begin
   ConfigButton(Btn1);
 end;
 
+procedure TFormMain.Btn1Click(Sender: TObject);
+begin
+  DoButtonAction(Btn1);
+end;
+
+procedure TFormMain.Btn2Click(Sender: TObject);
+begin
+  DoButtonAction(Btn2);
+end;
+
+procedure TFormMain.Btn3Click(Sender: TObject);
+begin
+  DoButtonAction(Btn3);
+end;
+
+procedure TFormMain.Btn4Click(Sender: TObject);
+begin
+  DoButtonAction(Btn4);
+end;
+
+procedure TFormMain.Btn5Click(Sender: TObject);
+begin
+  DoButtonAction(Btn5);
+end;
+
+procedure TFormMain.Btn6Click(Sender: TObject);
+begin
+  DoButtonAction(Btn6);
+end;
+
+procedure TFormMain.Btn7Click(Sender: TObject);
+begin
+  DoButtonAction(Btn7);
+end;
+
+procedure TFormMain.Btn8Click(Sender: TObject);
+begin
+  DoButtonAction(Btn8);
+end;
+
 procedure TFormMain.BtnCfg2Click(Sender: TObject);
 begin
   ConfigButton(Btn2);
@@ -476,8 +525,7 @@ end;
 function TFormMain.GetSequence(AButton: TButton): String;
 begin
   // sequence in the ini is always hex encoded
-  IniProp.IniSection := 'Buttons';
-  Result := IniProp.ReadString('Name' + IntToStr(AButton.Tag), '');
+  Result := IniRead('Buttons', 'Sequence' + IntToStr(AButton.Tag), '');
 end;
 
 procedure TFormMain.ConfigButton(AButton: TButton);
@@ -516,6 +564,13 @@ function TFormMain.IniRead(Section, Key, DefaultValue: String): String;
 begin
   IniProp.IniSection := Section;
   Result := IniProp.ReadString(Key, DefaultValue);
+end;
+
+procedure TFormMain.DoButtonAction(B: TButton);
+begin
+  if ComPort.IsOpen then begin
+    SendHex(GetSequence(B));
+  end;
 end;
 
 end.
