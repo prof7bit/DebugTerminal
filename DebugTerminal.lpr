@@ -24,7 +24,7 @@ uses
   {$ENDIF}
   Debug,
   Interfaces, // this includes the LCL widgetset
-  Forms, FMain, ComPort, FConfigButton;
+  Forms, tachartlazaruspkg, FMain, ComPort, FConfigButton;
 
 {$R *.res}
 

@@ -22,7 +22,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
-  ComPort, FConfigButton, LCLType, ExtCtrls, SynEdit, SynEditKeyCmds, syncobjs;
+  ComPort, FConfigButton, LCLType, ExtCtrls, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
+  TAChartUtils;
 
 const
   HISTSIZE = 100;
@@ -73,6 +74,7 @@ type
     CbPort: TComboBox;
     CbBaud: TComboBox;
     CbEncodingSend: TComboBox;
+    Chart: TChart;
     IniProp: TIniPropStorage;
     FOutput: TSynEdit;
     Timer: TTimer;
@@ -109,11 +111,13 @@ type
     procedure TbConnectChange(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
     procedure FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure OutputAddByte(B: Byte);
-    procedure OutputLineBreak;
   private
     Receiver: TReceiver;
     History: THistory;
+    procedure OutputAddByte(B: Byte);
+    procedure OutputLineBreak;
+    procedure PlotInit;
+    procedure PlotAddByte(B: Byte);
     procedure UpdateConnectButton;
     function GetSequence(AButton: TButton): String;
     procedure ConfigButton(AButton: TButton);
@@ -126,6 +130,9 @@ type
     RxLock: TCriticalSection;
     RxBuf: String;
     RxByteColumn: Integer;
+    PlotX: Integer;
+    LastByte: Byte;
+    ByteCounter: Byte;
   end;
 
   { TReceiver }
@@ -422,6 +429,7 @@ begin
   CbBaud.Text := IniRead('Serial', 'Baud', '9600');
   CbEncodingRecv.Text := IniRead('Encoding', 'Receive', 'Hex');
   CbEncodingSend.Text := IniRead('Encoding', 'Send', 'Hex');
+  PlotInit;
   RxLock := TCriticalSection.Create;
   Receiver := TReceiver.Create;
 end;
@@ -445,9 +453,10 @@ begin
   FOutput.BeginUpdate(False);
   for C in RxBuf do begin
     OutputAddByte(Ord(C));
+    PlotAddByte(Ord(C));
   end;
   FOutput.EndUpdate;
-  RxBuf := '';
+  SetLength(RxBuf, 0);
   RxLock.Release;
 end;
 
@@ -505,6 +514,40 @@ begin
   FOutput.ExecuteCommand(ecEditorBottom, '', nil);
   FOutput.InsertTextAtCaret(LineEnding);
   RxByteColumn := 0;
+end;
+
+procedure TFormMain.PlotInit;
+var
+  S: TLineSeries;
+begin
+  S := TLineSeries.Create(Chart);
+  Chart.AddSeries(S);
+
+  ByteCounter := 2;
+  PlotX := 0;
+end;
+
+procedure TFormMain.PlotAddByte(B: Byte);
+var
+  E: TDoubleRect;
+  S: TLineSeries;
+begin
+  if ByteCounter = 2 then begin
+    LastByte := B;
+  end;
+  if ByteCounter = 1 then begin
+    S := TLineSeries(Chart.Series.Items[0]);
+    S.AddXY(PlotX, (Word(B) shl 8) + LastByte);
+  end;
+  PlotX += 1;
+  ByteCounter -=1;
+  if ByteCounter = 0 then begin
+    ByteCounter := 2;
+  end;
+
+  E := Chart.GetFullExtent;
+  E.A.X := PlotX - Chart.Width - 50;
+  Chart.LogicalExtent := E;
 end;
 
 procedure TFormMain.UpdateConnectButton;

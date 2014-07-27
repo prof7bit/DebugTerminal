@@ -1,7 +1,7 @@
 object FormMain: TFormMain
-  Left = 287
+  Left = 636
   Height = 657
-  Top = 150
+  Top = 187
   Width = 779
   Caption = 'Debug Terminal'
   ClientHeight = 657
@@ -19,10 +19,10 @@ object FormMain: TFormMain
     Height = 626
     Top = 0
     Width = 779
-    ActivePage = TsTerminal
+    ActivePage = TsPlot
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 76
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object TsTerminal: TTabSheet
       Caption = 'Terminal'
@@ -859,6 +859,44 @@ object FormMain: TFormMain
     end
     object TsPlot: TTabSheet
       Caption = 'Plot'
+      ClientHeight = 596
+      ClientWidth = 771
+      object Chart: TChart
+        AnchorSideLeft.Control = TsPlot
+        AnchorSideTop.Control = TsPlot
+        AnchorSideRight.Control = TsPlot
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TsPlot
+        AnchorSideBottom.Side = asrBottom
+        Left = 0
+        Height = 596
+        Top = 0
+        Width = 771
+        AutoFocus = True
+        AntialiasingMode = amOn
+        AxisList = <        
+          item
+            Minors = <>
+            Title.LabelFont.Orientation = 900
+          end        
+          item
+            Intervals.MaxLength = 100
+            Alignment = calBottom
+            MarginsForMarks = False
+            Minors = <>
+          end>
+        BackColor = clWindow
+        Foot.Brush.Color = clBtnFace
+        Foot.Font.Color = clBlue
+        Title.Brush.Color = clBtnFace
+        Title.Font.Color = clBlue
+        Title.Text.Strings = (
+          'TAChart'
+        )
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        DoubleBuffered = True
+        ParentColor = False
+      end
     end
   end
   object CbPort: TComboBox
