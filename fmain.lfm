@@ -1,7 +1,7 @@
 object FormMain: TFormMain
-  Left = 460
+  Left = 707
   Height = 657
-  Top = 151
+  Top = 145
   Width = 779
   Caption = 'Debug Terminal'
   ClientHeight = 657
@@ -21,202 +21,283 @@ object FormMain: TFormMain
     Width = 779
     ActivePage = TsTerminal
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Bottom = 76
     TabIndex = 0
     TabOrder = 0
     object TsTerminal: TTabSheet
       Caption = 'Terminal'
-      ClientHeight = 596
+      ClientHeight = 589
       ClientWidth = 771
       object FInput: TEdit
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideRight.Control = TsTerminal
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 3
-        Height = 23
-        Top = 464
-        Width = 645
+        Left = 0
+        Height = 21
+        Top = 460
+        Width = 657
         Anchors = [akLeft, akRight, akBottom]
+        BorderSpacing.Right = 114
+        BorderSpacing.Bottom = 108
         Enabled = False
         OnKeyDown = FInputKeyDown
         TabOrder = 0
       end
       object Btn1: TButton
         Tag = 1
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 3
+        Left = 2
         Height = 25
-        Top = 493
+        Top = 488
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 2
+        BorderSpacing.Bottom = 76
         Caption = 'Btn1'
         TabOrder = 1
       end
       object BtnCfg1: TButton
-        Left = 144
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
+        AnchorSideBottom.Side = asrBottom
+        Left = 142
         Height = 25
-        Top = 493
+        Top = 488
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 142
+        BorderSpacing.Bottom = 76
         Caption = '...'
         OnClick = BtnCfg1Click
         TabOrder = 2
       end
       object Btn2: TButton
         Tag = 2
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 3
+        Left = 2
         Height = 25
-        Top = 517
+        Top = 512
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 2
+        BorderSpacing.Bottom = 52
         Caption = 'Btn2'
         TabOrder = 3
       end
       object BtnCfg2: TButton
-        Left = 144
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
+        AnchorSideBottom.Side = asrBottom
+        Left = 142
         Height = 25
-        Top = 517
+        Top = 512
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 142
+        BorderSpacing.Bottom = 52
         Caption = '...'
         OnClick = BtnCfg2Click
         TabOrder = 4
       end
       object Btn3: TButton
         Tag = 3
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 3
+        Left = 2
         Height = 25
-        Top = 541
+        Top = 537
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 2
+        BorderSpacing.Bottom = 27
         Caption = 'Btn3'
         TabOrder = 15
       end
       object BtnCfg3: TButton
-        Left = 144
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
+        AnchorSideBottom.Side = asrBottom
+        Left = 142
         Height = 25
-        Top = 541
+        Top = 537
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 142
+        BorderSpacing.Bottom = 27
         Caption = '...'
         OnClick = BtnCfg3Click
         TabOrder = 16
       end
       object Btn4: TButton
         Tag = 4
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 3
+        Left = 2
         Height = 25
-        Top = 565
+        Top = 562
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 2
+        BorderSpacing.Bottom = 2
         Caption = 'Btn4'
         TabOrder = 5
       end
       object BtnCfg4: TButton
-        Left = 144
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
+        AnchorSideBottom.Side = asrBottom
+        Left = 142
         Height = 25
-        Top = 565
+        Top = 562
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 142
+        BorderSpacing.Bottom = 2
         Caption = '...'
         OnClick = BtnCfg4Click
         TabOrder = 6
       end
       object Btn5: TButton
         Tag = 5
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 176
+        Left = 180
         Height = 25
-        Top = 493
+        Top = 488
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 180
+        BorderSpacing.Bottom = 76
         Caption = 'Btn5'
         TabOrder = 7
       end
       object BtnCfg5: TButton
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 317
+        Left = 320
         Height = 25
-        Top = 493
+        Top = 488
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 320
+        BorderSpacing.Bottom = 76
         Caption = '...'
         OnClick = BtnCfg5Click
         TabOrder = 8
       end
       object Btn6: TButton
         Tag = 6
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 176
+        Left = 180
         Height = 25
-        Top = 517
+        Top = 512
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 180
+        BorderSpacing.Bottom = 52
         Caption = 'Btn6'
         TabOrder = 9
       end
       object BtnCfg6: TButton
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 317
+        Left = 320
         Height = 25
-        Top = 517
+        Top = 512
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 320
+        BorderSpacing.Bottom = 52
         Caption = '...'
         OnClick = BtnCfg6Click
         TabOrder = 10
       end
       object Btn7: TButton
         Tag = 7
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 176
+        Left = 180
         Height = 25
-        Top = 541
+        Top = 537
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 180
+        BorderSpacing.Bottom = 27
         Caption = 'Btn7'
         TabOrder = 11
       end
       object BtnCfg7: TButton
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 317
+        Left = 320
         Height = 25
-        Top = 541
+        Top = 537
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 320
+        BorderSpacing.Bottom = 27
         Caption = '...'
         OnClick = BtnCfg7Click
         TabOrder = 12
       end
       object Btn8: TButton
         Tag = 8
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 176
+        Left = 180
         Height = 25
-        Top = 565
+        Top = 562
         Width = 139
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 180
+        BorderSpacing.Bottom = 2
         Caption = 'Btn8'
         TabOrder = 13
       end
       object BtnCfg8: TButton
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 317
+        Left = 320
         Height = 25
-        Top = 565
+        Top = 562
         Width = 24
         Anchors = [akLeft, akBottom]
+        BorderSpacing.Left = 320
+        BorderSpacing.Bottom = 2
         Caption = '...'
         OnClick = BtnCfg8Click
         TabOrder = 14
       end
       inline FOutput: TSynEdit
+        AnchorSideLeft.Control = TsTerminal
+        AnchorSideTop.Control = TsTerminal
+        AnchorSideRight.Control = TsTerminal
         AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
         Left = 0
-        Height = 440
-        Top = 24
-        Width = 775
+        Height = 429
+        Top = 25
+        Width = 771
+        BorderSpacing.Top = 25
+        BorderSpacing.Bottom = 135
         Anchors = [akTop, akLeft, akRight, akBottom]
         Font.Height = -13
         Font.Name = 'Courier New'
@@ -722,27 +803,15 @@ object FormMain: TFormMain
           end
         end
       end
-      object CbEncodingSend: TComboBox
-        Left = 656
-        Height = 23
-        Top = 464
-        Width = 112
-        ItemHeight = 0
-        ItemIndex = 0
-        Items.Strings = (
-          'Hex'
-          'ASCII'
-        )
-        OnChange = CbEncodingSendChange
-        Style = csDropDownList
-        TabOrder = 18
-        Text = 'Hex'
-      end
       object CbEncodingRecv: TComboBox
-        Left = 656
-        Height = 24
+        AnchorSideTop.Control = TsTerminal
+        AnchorSideRight.Control = TsTerminal
+        AnchorSideRight.Side = asrBottom
+        Left = 659
+        Height = 23
         Top = 0
         Width = 112
+        Anchors = [akTop, akRight]
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
@@ -756,6 +825,29 @@ object FormMain: TFormMain
         TabOrder = 19
         Text = 'Hex'
       end
+      object CbEncodingSend: TComboBox
+        AnchorSideTop.Control = TsTerminal
+        AnchorSideRight.Control = TsTerminal
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TsTerminal
+        AnchorSideBottom.Side = asrBottom
+        Left = 659
+        Height = 23
+        Top = 459
+        Width = 112
+        Anchors = [akRight, akBottom]
+        BorderSpacing.Bottom = 107
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'Hex'
+          'ASCII'
+        )
+        OnChange = CbEncodingSendChange
+        Style = csDropDownList
+        TabOrder = 18
+        Text = 'Hex'
+      end
     end
     object TsPlot: TTabSheet
       Caption = 'Plot'
@@ -764,8 +856,8 @@ object FormMain: TFormMain
   object CbPort: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 40
-    Height = 24
-    Top = 629
+    Height = 27
+    Top = 625
     Width = 124
     Anchors = [akLeft, akBottom]
     ItemHeight = 0
@@ -787,8 +879,8 @@ object FormMain: TFormMain
   object CbBaud: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 232
-    Height = 24
-    Top = 630
+    Height = 23
+    Top = 629
     Width = 100
     Anchors = [akLeft, akBottom]
     ItemHeight = 0

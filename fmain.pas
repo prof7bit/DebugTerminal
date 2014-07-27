@@ -24,7 +24,29 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
   ComPort, FConfigButton, LCLType, ExtCtrls, SynEdit, SynEditKeyCmds, syncobjs;
 
+const
+  HISTSIZE = 100;
+
 type
+
+  { THistory }
+
+  THistory = class(TComponent)
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Add(S: String);
+    function Prev: String;
+    function Next: String;
+    procedure Reset;
+  private
+    List: TStringList;
+    Ptr: Integer;
+    procedure Save;
+    procedure Load;
+    function Find(S: String; out I: Integer): Boolean;
+    procedure Remove(S: String);
+  end;
 
   TReceiver = class;
 
@@ -83,6 +105,7 @@ type
     procedure OutputLineBreak;
   private
     Receiver: TReceiver;
+    History: THistory;
     procedure UpdateConnectButton;
     function GetSequence(AButton: TButton): String;
     procedure ConfigButton(AButton: TButton);
@@ -122,6 +145,108 @@ begin
     else
       Result[I] := '0';
     B := B shl 1;
+  end;
+end;
+
+{ THistory }
+
+constructor THistory.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  List := TStringList.Create;
+  Load;
+  Ptr := 0;
+end;
+
+destructor THistory.Destroy;
+begin
+  Save;
+  List.Free;
+  inherited Destroy;
+end;
+
+procedure THistory.Add(S: String);
+begin
+  Remove(S);
+  List.Insert(0, S);
+  Save;
+  Reset;
+end;
+
+function THistory.Prev: String;
+begin
+  Result := List.Strings[Ptr];
+  Ptr += 1;
+  if Ptr > List.Count - 1 then
+    Ptr := List.Count - 1;
+end;
+
+function THistory.Next: String;
+begin
+  Ptr -= 1;
+  if Ptr < 0 then begin
+    Ptr := 0;
+    Result := ''
+  end
+  else
+    Result := List.Strings[Ptr];
+end;
+
+procedure THistory.Reset;
+begin
+  Ptr := 0;
+end;
+
+procedure THistory.Save;
+var
+  I: Integer;
+begin
+  for I := 1 to HISTSIZE do begin
+    if I-1 < List.Count then begin
+      FormMain.IniWrite('History', 'Item' + IntToStr(I), List.Strings[I-1]);
+    end
+    else begin
+      FormMain.IniWrite('History', 'Item' + IntToStr(I), '');
+    end;
+  end;
+end;
+
+procedure THistory.Load;
+var
+  I: Integer;
+  S: String;
+begin
+  List.Clear;
+  for I := 1 to HISTSIZE do begin
+    S := FormMain.IniRead('History', 'Item' + IntToStr(I), '');
+    if S <> '' then begin
+      List.Append(S);
+    end;
+  end;
+  Reset;
+end;
+
+function THistory.Find(S: String; out I: Integer): Boolean;
+var
+  J: Integer;
+begin
+  Result := False;
+  for J := 0 to List.Count - 1 do begin
+    if List.Strings[J] = S then begin
+      I := J;
+      Result := True;
+      break;
+    end;
+  end;
+end;
+
+procedure THistory.Remove(S: String);
+var
+  I: Integer;
+begin
+  while Find(S, I) do begin
+    List.Delete(I);
+    writeln('deleting ' + S, ' index: ', I);
   end;
 end;
 
@@ -232,6 +357,7 @@ var
   I: Integer;
   B: TControl;
 begin
+  History := THistory.Create(Self);
   EnumerateSerialPorts(CbPort.Items);
   ComPort := TSimpleComPort.Create(self);
   IniProp.IniSection := 'Buttons';
@@ -281,8 +407,16 @@ procedure TFormMain.FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftS
 begin
   if Key = VK_RETURN then begin
     if SendHex(FInput.Text) then begin
+      History.Add(FInput.Text);
       FInput.Text := '';
     end;
+  end;
+
+  if Key = VK_UP then begin
+    FInput.Text := History.Prev;
+  end;
+  if Key = VK_DOWN then begin
+    FInput.Text := History.Next;
   end;
 end;
 
