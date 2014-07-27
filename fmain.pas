@@ -246,7 +246,6 @@ var
 begin
   while Find(S, I) do begin
     List.Delete(I);
-    writeln('deleting ' + S, ' index: ', I);
   end;
 end;
 
