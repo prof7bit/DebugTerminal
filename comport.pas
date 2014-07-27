@@ -162,7 +162,7 @@ procedure TSimpleComPort.Send(var Buffer; Count: LongInt);
 begin
   if IsOpen then begin
     SerWrite(FHandle, Buffer, Count);
-    SerSync(FHandle);
+    SerFlush(FHandle);
   end;
 end;
 
@@ -172,8 +172,17 @@ begin
 end;
 
 function TSimpleComPort.Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
+const
+  MILLI_PER_DAY = 1000 * 60 * 60 * 24;
+var
+  TimeoutTime: Double;
 begin
-  Result := SerReadTimeout(FHandle, RecvByte, TimeoutMilli);
+  TimeoutTime := Now + TimeoutMilli / MILLI_PER_DAY;
+  repeat
+    Result := SerRead(FHandle, RecvByte, 1);
+    if Result = 1 then break;
+    Sleep(1);
+  until Now > TimeoutTime;
 end;
 
 procedure TSimpleComPort.Close;
