@@ -26,7 +26,7 @@ object FormMain: TFormMain
     object TsTerminal: TTabSheet
       Caption = 'Terminal'
       ClientHeight = 596
-      ClientWidth = 771
+      ClientWidth = 692
       object FInput: TEdit
         AnchorSideLeft.Control = TsTerminal
         AnchorSideRight.Control = TsTerminal
@@ -36,7 +36,7 @@ object FormMain: TFormMain
         Left = 0
         Height = 23
         Top = 465
-        Width = 657
+        Width = 578
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Right = 114
         BorderSpacing.Bottom = 108
@@ -302,7 +302,7 @@ object FormMain: TFormMain
         Left = 0
         Height = 436
         Top = 25
-        Width = 771
+        Width = 692
         BorderSpacing.Top = 25
         BorderSpacing.Bottom = 135
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -814,7 +814,7 @@ object FormMain: TFormMain
         AnchorSideTop.Control = TsTerminal
         AnchorSideRight.Control = TsTerminal
         AnchorSideRight.Side = asrBottom
-        Left = 659
+        Left = 580
         Height = 24
         Top = 0
         Width = 112
@@ -838,7 +838,7 @@ object FormMain: TFormMain
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 659
+        Left = 580
         Height = 24
         Top = 465
         Width = 112
@@ -874,6 +874,7 @@ object FormMain: TFormMain
         AntialiasingMode = amOn
         AxisList = <        
           item
+            MarginsForMarks = False
             Minors = <>
             Title.LabelFont.Orientation = 900
           end        
@@ -883,7 +884,7 @@ object FormMain: TFormMain
             MarginsForMarks = False
             Minors = <>
           end>
-        BackColor = clTeal
+        BackColor = 5592320
         Foot.Brush.Color = clBtnFace
         Foot.Font.Color = clBlue
         Title.Brush.Color = clBtnFace
@@ -895,6 +896,18 @@ object FormMain: TFormMain
         BorderSpacing.Top = 25
         Color = clWindow
         ParentColor = False
+        object Channel1: TLineSeries
+          LinePen.Color = clYellow
+        end
+        object Channel2: TLineSeries
+          LinePen.Color = clAqua
+        end
+        object Channel3: TLineSeries
+          LinePen.Color = clLime
+        end
+        object Channel4: TLineSeries
+          LinePen.Color = clSilver
+        end
       end
       object SpinChannels: TSpinEdit
         AnchorSideLeft.Control = TsPlot
@@ -908,6 +921,7 @@ object FormMain: TFormMain
         BorderSpacing.Right = 20
         MaxValue = 4
         MinValue = 1
+        OnChange = SpinChannelsChange
         TabOrder = 1
         Value = 1
       end
@@ -950,6 +964,7 @@ object FormMain: TFormMain
         Increment = 8
         MaxValue = 16
         MinValue = 8
+        OnChange = SpinBitsChange
         TabOrder = 2
         Value = 8
       end
@@ -963,6 +978,7 @@ object FormMain: TFormMain
         Anchors = [akTop, akRight]
         BorderSpacing.Right = 10
         Caption = 'Sync'
+        OnClick = BtnSyncClick
         TabOrder = 3
       end
       object BtnClear: TButton
@@ -976,6 +992,7 @@ object FormMain: TFormMain
         Width = 75
         Anchors = [akTop, akRight]
         Caption = 'Clear'
+        OnClick = BtnClearClick
         TabOrder = 4
       end
       object TrackZoom: TTrackBar
@@ -987,7 +1004,11 @@ object FormMain: TFormMain
         Height = 25
         Top = 0
         Width = 236
+        Max = 100
+        OnChange = TrackZoomChange
+        PageSize = 1
         Position = 0
+        TickStyle = tsNone
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Right = 20

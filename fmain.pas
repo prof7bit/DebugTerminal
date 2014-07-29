@@ -23,12 +23,29 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
   ComPort, FConfigButton, LCLType, ExtCtrls, Spin, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
-  TAChartUtils;
+  TAChartUtils, Math;
 
 const
   HISTSIZE = 100;
 
 type
+
+  TPlotData16 = record
+    Channel1: UInt16;
+    Channel2: UInt16;
+    Channel3: UInt16;
+    Channel4: UInt16;
+  end;
+
+  PPlotData8 = ^TPlotData8;
+  TPlotData8 = record
+    Channel1: UInt8;
+    Channel2: UInt8;
+    Channel3: UInt8;
+    Channel4: UInt8;
+  end;
+
+  TPlotDataRaw = array[0..7] of Byte;
 
   { THistory }
 
@@ -77,6 +94,10 @@ type
     CbBaud: TComboBox;
     CbEncodingSend: TComboBox;
     Chart: TChart;
+    Channel1: TLineSeries;
+    Channel2: TLineSeries;
+    Channel3: TLineSeries;
+    Channel4: TLineSeries;
     IniProp: TIniPropStorage;
     FOutput: TSynEdit;
     LblChannels: TLabel;
@@ -109,20 +130,26 @@ type
     procedure BtnCfg6Click(Sender: TObject);
     procedure BtnCfg7Click(Sender: TObject);
     procedure BtnCfg8Click(Sender: TObject);
+    procedure BtnClearClick(Sender: TObject);
+    procedure BtnSyncClick(Sender: TObject);
     procedure CbBaudChange(Sender: TObject);
     procedure CbEncodingRecvChange(Sender: TObject);
     procedure CbEncodingSendChange(Sender: TObject);
     procedure CbPortChange(Sender: TObject);
     procedure CbPortGetItems(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure SpinBitsChange(Sender: TObject);
+    procedure SpinChannelsChange(Sender: TObject);
     procedure TbConnectChange(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
     procedure FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure TrackZoomChange(Sender: TObject);
   private
     Receiver: TReceiver;
     History: THistory;
     procedure OutputAddByte(B: Byte);
     procedure OutputLineBreak;
+    procedure PlotApplyZoom;
     procedure PlotInit;
     procedure PlotAddByte(B: Byte);
     procedure UpdateConnectButton;
@@ -131,6 +158,7 @@ type
     function SendHex(S: String): Boolean;
     procedure IniWrite(Section, Key, Value: String);
     function IniRead(Section, Key, DefaultValue: String): String;
+    function IniReadInt(Section, Key: String; DefaultValue: Integer): Integer;
     procedure DoButtonAction(B: TButton);
   public
     ComPort: TSimpleComPort;
@@ -138,6 +166,8 @@ type
     RxBuf: String;
     RxByteColumn: Integer;
     PlotX: Integer;
+    PlotDataRaw: TPlotDataRaw;
+    PlotDataByteCount: Byte;
     LastByte: Byte;
     ByteCounter: Byte;
     destructor Destroy; override;
@@ -387,6 +417,21 @@ begin
   ConfigButton(Btn8);
 end;
 
+procedure TFormMain.BtnClearClick(Sender: TObject);
+begin
+  PlotInit;
+end;
+
+procedure TFormMain.BtnSyncClick(Sender: TObject);
+begin
+  if PlotDataByteCount > 0 then begin
+    PlotDataByteCount -= 1;
+  end
+  else begin
+    PlotDataByteCount := (SpinBits.Value div 8) * SpinChannels.Value - 1;
+  end;
+end;
+
 procedure TFormMain.CbBaudChange(Sender: TObject);
 begin
   IniWrite('Serial', 'Baud', CbBaud.Text);
@@ -429,9 +474,22 @@ begin
   CbBaud.Text := IniRead('Serial', 'Baud', '9600');
   CbEncodingRecv.Text := IniRead('Encoding', 'Receive', 'Hex');
   CbEncodingSend.Text := IniRead('Encoding', 'Send', 'Hex');
+  TrackZoom.Position := IniReadInt('Plot', 'Zoom', 40);
+  SpinChannels.Value := IniReadInt('Plot', 'Channels', 1);
+  SpinBits.Value := IniReadInt('Plot', 'Bits', 8);
   PlotInit;
   RxLock := TCriticalSection.Create;
   Receiver := TReceiver.Create;
+end;
+
+procedure TFormMain.SpinBitsChange(Sender: TObject);
+begin
+  IniWrite('Plot', 'Bits', IntToStr(SpinBits.Value));
+end;
+
+procedure TFormMain.SpinChannelsChange(Sender: TObject);
+begin
+  IniWrite('Plot', 'Channels', IntToStr(SpinChannels.Value));
 end;
 
 procedure TFormMain.TbConnectChange(Sender: TObject);
@@ -477,6 +535,12 @@ begin
   end;
 end;
 
+procedure TFormMain.TrackZoomChange(Sender: TObject);
+begin
+  PlotApplyZoom;
+  IniWrite('Plot', 'Zoom', IntToStr(TrackZoom.Position));
+end;
+
 procedure TFormMain.OutputAddByte(B: Byte);
 var
   S: String;
@@ -516,38 +580,67 @@ begin
   RxByteColumn := 0;
 end;
 
+procedure TFormMain.PlotApplyZoom;
+var
+  E: TDoubleRect;
+  F: Double;
+begin
+  F := power(2,  TrackZoom.Position / 10) / 10;
+  E := Chart.GetFullExtent;
+  E.A.X := PlotX - Chart.Width * F;
+  Chart.LogicalExtent := E;
+end;
+
 procedure TFormMain.PlotInit;
 var
   S: TLineSeries;
 begin
-  S := TLineSeries.Create(Chart);
-  Chart.AddSeries(S);
-
-  ByteCounter := 2;
+  PlotDataByteCount := 0;
+  Channel1.Clear;
+  Channel2.Clear;
+  Channel3.Clear;
+  Channel4.Clear;
   PlotX := 0;
+  PlotApplyZoom;
 end;
 
 procedure TFormMain.PlotAddByte(B: Byte);
 var
-  E: TDoubleRect;
-  S: TLineSeries;
+  FrameSize: Byte;
+  Channels: TPlotData16;
+  Plotdata8: PPlotData8;
 begin
-  if ByteCounter = 2 then begin
-    LastByte := B;
-  end;
-  if ByteCounter = 1 then begin
-    S := TLineSeries(Chart.Series.Items[0]);
-    S.AddXY(PlotX, (Word(B) shl 8) + LastByte);
-  end;
-  PlotX += 1;
-  ByteCounter -=1;
-  if ByteCounter = 0 then begin
-    ByteCounter := 2;
-  end;
+  FrameSize := (SpinBits.Value div 8) * SpinChannels.Value;
+  PlotDataRaw[PlotDataByteCount] := B;
+  PlotDataByteCount += 1;
+  if PlotDataByteCount = FrameSize then begin
+    case SpinBits.Value of
+      8: begin
+        Plotdata8 := PPlotData8(@PlotDataRaw);
+        Channels.Channel1 := Plotdata8^.Channel1;
+        Channels.Channel2 := Plotdata8^.Channel2;
+        Channels.Channel3 := Plotdata8^.Channel3;
+        Channels.Channel4 := Plotdata8^.Channel4;
+      end;
+      16: begin
+        Channels := TPlotData16(PlotDataRaw);
+      end;
+    end;
 
-  E := Chart.GetFullExtent;
-  E.A.X := PlotX - Chart.Width - 50;
-  Chart.LogicalExtent := E;
+    Channel1.AddXY(PlotX, Channels.Channel1);
+    if SpinChannels.Value > 1 then
+      Channel2.AddXY(PlotX, Channels.Channel2);
+    if SpinChannels.Value > 2 then
+      Channel3.AddXY(PlotX, Channels.Channel3);
+    if SpinChannels.Value > 3 then
+      Channel4.AddXY(PlotX, Channels.Channel4);
+
+    PlotX += 1;
+
+    PlotApplyZoom;
+
+    PlotDataByteCount := 0;
+  end;
 end;
 
 procedure TFormMain.UpdateConnectButton;
@@ -612,6 +705,15 @@ function TFormMain.IniRead(Section, Key, DefaultValue: String): String;
 begin
   IniProp.IniSection := Section;
   Result := IniProp.ReadString(Key, DefaultValue);
+end;
+
+function TFormMain.IniReadInt(Section, Key: String; DefaultValue: Integer): Integer;
+begin
+  try
+    Result := StrToInt(IniRead(Section, Key, IntToStr(DefaultValue)));
+  except
+    Result := DefaultValue;
+  end;
 end;
 
 procedure TFormMain.DoButtonAction(B: TButton);
