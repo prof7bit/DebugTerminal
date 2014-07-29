@@ -22,7 +22,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
-  ComPort, FConfigButton, LCLType, ExtCtrls, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
+  ComPort, FConfigButton, LCLType, ExtCtrls, Spin, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
   TAChartUtils;
 
 const
@@ -70,6 +70,8 @@ type
     BtnCfg6: TButton;
     BtnCfg7: TButton;
     BtnCfg8: TButton;
+    BtnSync: TButton;
+    BtnClear: TButton;
     CbEncodingRecv: TComboBox;
     CbPort: TComboBox;
     CbBaud: TComboBox;
@@ -77,11 +79,17 @@ type
     Chart: TChart;
     IniProp: TIniPropStorage;
     FOutput: TSynEdit;
+    LblChannels: TLabel;
+    LblBits: TLabel;
+    LblZoom: TLabel;
+    SpinChannels: TSpinEdit;
+    SpinBits: TSpinEdit;
     Timer: TTimer;
     FInput: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     PageControl: TPageControl;
+    TrackZoom: TTrackBar;
     TsTerminal: TTabSheet;
     TsPlot: TTabSheet;
     TbConnect: TToggleBox;
