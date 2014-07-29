@@ -871,7 +871,6 @@ object FormMain: TFormMain
         Height = 598
         Top = 0
         Width = 771
-        AutoFocus = True
         AntialiasingMode = amOn
         AxisList = <        
           item
@@ -884,7 +883,7 @@ object FormMain: TFormMain
             MarginsForMarks = False
             Minors = <>
           end>
-        BackColor = clWindow
+        BackColor = clTeal
         Foot.Brush.Color = clBtnFace
         Foot.Font.Color = clBlue
         Title.Brush.Color = clBtnFace
@@ -893,7 +892,7 @@ object FormMain: TFormMain
           'TAChart'
         )
         Anchors = [akTop, akLeft, akRight, akBottom]
-        DoubleBuffered = True
+        Color = clWindow
         ParentColor = False
       end
     end

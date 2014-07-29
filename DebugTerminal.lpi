@@ -54,7 +54,6 @@
       <Unit2>
         <Filename Value="comport.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ComPort"/>
       </Unit2>
       <Unit3>
         <Filename Value="serial_fpctrunk.pp"/>
