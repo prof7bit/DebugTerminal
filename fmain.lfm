@@ -19,14 +19,14 @@ object FormMain: TFormMain
     Height = 626
     Top = 0
     Width = 779
-    ActivePage = TsPlot
+    ActivePage = TsTerminal
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 76
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object TsTerminal: TTabSheet
       Caption = 'Terminal'
-      ClientHeight = 596
+      ClientHeight = 598
       ClientWidth = 771
       object FInput: TEdit
         AnchorSideLeft.Control = TsTerminal
@@ -36,7 +36,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 0
         Height = 23
-        Top = 465
+        Top = 467
         Width = 657
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Right = 114
@@ -52,7 +52,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 2
         Height = 25
-        Top = 495
+        Top = 497
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
@@ -67,7 +67,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 142
         Height = 25
-        Top = 495
+        Top = 497
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 142
@@ -83,7 +83,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 2
         Height = 25
-        Top = 519
+        Top = 521
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
@@ -98,7 +98,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 142
         Height = 25
-        Top = 519
+        Top = 521
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 142
@@ -114,7 +114,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 2
         Height = 25
-        Top = 544
+        Top = 546
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
@@ -129,7 +129,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 142
         Height = 25
-        Top = 544
+        Top = 546
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 142
@@ -145,7 +145,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 2
         Height = 25
-        Top = 569
+        Top = 571
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
@@ -160,7 +160,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 142
         Height = 25
-        Top = 569
+        Top = 571
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 142
@@ -176,7 +176,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 180
         Height = 25
-        Top = 495
+        Top = 497
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 180
@@ -191,7 +191,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 320
         Height = 25
-        Top = 495
+        Top = 497
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 320
@@ -207,7 +207,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 180
         Height = 25
-        Top = 519
+        Top = 521
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 180
@@ -222,7 +222,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 320
         Height = 25
-        Top = 519
+        Top = 521
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 320
@@ -238,7 +238,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 180
         Height = 25
-        Top = 544
+        Top = 546
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 180
@@ -253,7 +253,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 320
         Height = 25
-        Top = 544
+        Top = 546
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 320
@@ -269,7 +269,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 180
         Height = 25
-        Top = 569
+        Top = 571
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 180
@@ -284,7 +284,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 320
         Height = 25
-        Top = 569
+        Top = 571
         Width = 24
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 320
@@ -301,7 +301,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
         Left = 0
-        Height = 436
+        Height = 438
         Top = 25
         Width = 771
         BorderSpacing.Top = 25
@@ -816,11 +816,11 @@ object FormMain: TFormMain
         AnchorSideRight.Control = TsTerminal
         AnchorSideRight.Side = asrBottom
         Left = 659
-        Height = 24
+        Height = 23
         Top = 0
         Width = 112
         Anchors = [akTop, akRight]
-        ItemHeight = 0
+        ItemHeight = 15
         ItemIndex = 0
         Items.Strings = (
           'Hex'
@@ -840,12 +840,12 @@ object FormMain: TFormMain
         AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
         Left = 659
-        Height = 24
-        Top = 465
+        Height = 23
+        Top = 468
         Width = 112
         Anchors = [akRight, akBottom]
         BorderSpacing.Bottom = 107
-        ItemHeight = 0
+        ItemHeight = 15
         ItemIndex = 0
         Items.Strings = (
           'Hex'
@@ -859,7 +859,7 @@ object FormMain: TFormMain
     end
     object TsPlot: TTabSheet
       Caption = 'Plot'
-      ClientHeight = 596
+      ClientHeight = 598
       ClientWidth = 771
       object Chart: TChart
         AnchorSideLeft.Control = TsPlot
@@ -869,7 +869,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Control = TsPlot
         AnchorSideBottom.Side = asrBottom
         Left = 0
-        Height = 596
+        Height = 598
         Top = 0
         Width = 771
         AutoFocus = True
@@ -902,11 +902,11 @@ object FormMain: TFormMain
   object CbPort: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 40
-    Height = 24
-    Top = 628
+    Height = 23
+    Top = 629
     Width = 124
     Anchors = [akLeft, akBottom]
-    ItemHeight = 0
+    ItemHeight = 15
     OnChange = CbPortChange
     OnGetItems = CbPortGetItems
     Style = csDropDownList
@@ -917,7 +917,7 @@ object FormMain: TFormMain
     Left = 10
     Height = 15
     Top = 634
-    Width = 25
+    Width = 22
     Anchors = [akLeft, akBottom]
     Caption = 'Port'
     ParentColor = False
@@ -925,11 +925,11 @@ object FormMain: TFormMain
   object CbBaud: TComboBox
     AnchorSideBottom.Side = asrBottom
     Left = 232
-    Height = 24
-    Top = 628
+    Height = 23
+    Top = 629
     Width = 100
     Anchors = [akLeft, akBottom]
-    ItemHeight = 0
+    ItemHeight = 15
     ItemIndex = 12
     Items.Strings = (
       '50'
@@ -961,7 +961,7 @@ object FormMain: TFormMain
     Left = 192
     Height = 15
     Top = 634
-    Width = 28
+    Width = 27
     Anchors = [akLeft, akBottom]
     Caption = 'Baud'
     ParentColor = False

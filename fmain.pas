@@ -552,17 +552,18 @@ end;
 
 procedure TFormMain.UpdateConnectButton;
 begin
+  FInput.Enabled := ComPort.IsOpen;
   if ComPort.IsOpen then begin
     TbConnect.State := cbChecked;
     TbConnect.Caption := 'Disconnect';
     OutputLineBreak;
     OutputLineBreak;
+    FInput.SetFocus;
   end
   else begin
     TbConnect.State := cbUnchecked;
     TbConnect.Caption := 'Connect';
   end;
-  FInput.Enabled := ComPort.IsOpen;
 end;
 
 function TFormMain.GetSequence(AButton: TButton): String;
@@ -587,9 +588,11 @@ var
   Buf: PChar;
 begin
   Result := False;
+  S := StringReplace(S, ' ', '', [rfReplaceAll]);
   L := Length(S) div 2;
   Getmem(Buf, L);
   if HexToBin(PChar(S), Buf, L) = L then begin
+    OutputLineBreak;
     ComPort.Send(Buf^, L);
     Result := True;
   end;

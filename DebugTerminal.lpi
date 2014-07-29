@@ -59,7 +59,6 @@
       <Unit3>
         <Filename Value="serial_fpctrunk.pp"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Serial_fpctrunk"/>
       </Unit3>
       <Unit4>
         <Filename Value="debug.pas"/>
@@ -71,7 +70,6 @@
         <ComponentName Value="FormConfigButton"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FConfigButton"/>
       </Unit5>
     </Units>
   </ProjectOptions>
