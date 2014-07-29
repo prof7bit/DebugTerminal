@@ -143,7 +143,7 @@ begin
     Port := '\\.\' + Port;
     {$endif}
     FHandle := SerOpen(Port);
-    if FHandle <> THandle(-1) then begin
+    if (FHandle <> THandle(-1)) and (FHandle <> 0) then begin
       SerSetParams(FHandle, Baud, Bits, ParityTypeFromChar(Parity), StopBits, []);
       Result := True;
       FIsOpen := True;
@@ -162,7 +162,7 @@ procedure TSimpleComPort.Send(var Buffer; Count: LongInt);
 begin
   if IsOpen then begin
     SerWrite(FHandle, Buffer, Count);
-    SerFlush(FHandle);
+    {%H-}SerFlush(FHandle);
   end;
 end;
 
@@ -194,4 +194,4 @@ begin
 end;
 
 end.
-
+

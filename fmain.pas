@@ -106,7 +106,6 @@ type
     procedure CbEncodingSendChange(Sender: TObject);
     procedure CbPortChange(Sender: TObject);
     procedure CbPortGetItems(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure TbConnectChange(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
@@ -133,6 +132,7 @@ type
     PlotX: Integer;
     LastByte: Byte;
     ByteCounter: Byte;
+    destructor Destroy; override;
   end;
 
   { TReceiver }
@@ -297,14 +297,6 @@ begin
   sel := CbPort.Text;
   EnumerateSerialPorts(CbPort.Items);
   CbPort.Text := sel;
-end;
-
-procedure TFormMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  Receiver.Terminate;
-  Receiver.WaitFor;
-  Receiver.Free;
-  RxLock.Free;
 end;
 
 procedure TFormMain.BtnCfg1Click(Sender: TObject);
@@ -558,7 +550,9 @@ begin
     TbConnect.Caption := 'Disconnect';
     OutputLineBreak;
     OutputLineBreak;
-    FInput.SetFocus;
+    if FInput.IsVisible then begin
+      FInput.SetFocus;
+    end;
   end
   else begin
     TbConnect.State := cbUnchecked;
@@ -617,6 +611,15 @@ begin
   if ComPort.IsOpen then begin
     SendHex(GetSequence(B));
   end;
+end;
+
+destructor TFormMain.Destroy;
+begin
+  Receiver.Terminate;
+  Receiver.WaitFor;
+  Receiver.Free;
+  RxLock.Free;
+  inherited Destroy;
 end;
 
 end.
