@@ -30,7 +30,11 @@ interface
 uses
   {$ifdef windows}
   windows,
-  Serial_fpctrunk,
+    {$if FPC_FULLVERSION < 20701}
+      Serial_fpctrunk,
+    {$else}
+      Serial,
+    {$endif}
   {$else}
   Serial,
   {$endif}
