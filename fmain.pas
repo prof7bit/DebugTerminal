@@ -430,6 +430,7 @@ begin
   else begin
     PlotDataByteCount := (SpinBits.Value div 8) * SpinChannels.Value - 1;
   end;
+  PlotInit;
 end;
 
 procedure TFormMain.CbBaudChange(Sender: TObject);
@@ -477,6 +478,7 @@ begin
   TrackZoom.Position := IniReadInt('Plot', 'Zoom', 40);
   SpinChannels.Value := IniReadInt('Plot', 'Channels', 1);
   SpinBits.Value := IniReadInt('Plot', 'Bits', 8);
+  PlotDataByteCount := 0;
   PlotInit;
   RxLock := TCriticalSection.Create;
   Receiver := TReceiver.Create;
@@ -595,7 +597,6 @@ procedure TFormMain.PlotInit;
 var
   S: TLineSeries;
 begin
-  PlotDataByteCount := 0;
   Channel1.Clear;
   Channel2.Clear;
   Channel3.Clear;
