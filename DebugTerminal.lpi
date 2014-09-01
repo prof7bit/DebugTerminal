@@ -16,7 +16,7 @@
     <VersionInfo>
       <StringTable ProductVersion=""/>
     </VersionInfo>
-    <BuildModes Count="4">
+    <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
       <Item2 Name="Linux_64_Qt4">
         <MacroValues Count="1">
@@ -53,44 +53,9 @@
           </Linking>
         </CompilerOptions>
       </Item2>
-      <Item3 Name="Windows_32">
+      <Item3 Name="Linux_64_GTK">
         <MacroValues Count="1">
-          <Macro2 Name="LCLWidgetType" Value="win32"/>
-        </MacroValues>
-        <CompilerOptions>
-          <Version Value="11"/>
-          <Target>
-            <Filename Value="DebugTerminal_win32"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir)"/>
-            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
-          </SearchPaths>
-          <CodeGeneration>
-            <SmartLinkUnit Value="True"/>
-            <TargetCPU Value="i386"/>
-            <TargetOS Value="win32"/>
-            <Optimizations>
-              <OptimizationLevel Value="2"/>
-            </Optimizations>
-          </CodeGeneration>
-          <Linking>
-            <Debugging>
-              <StripSymbols Value="True"/>
-              <UseExternalDbgSyms Value="True"/>
-            </Debugging>
-            <LinkSmart Value="True"/>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
-          </Linking>
-        </CompilerOptions>
-      </Item3>
-      <Item4 Name="Linux_64_GTK">
-        <MacroValues Count="1">
-          <Macro3 Name="LCLWidgetType" Value="gtk2"/>
+          <Macro2 Name="LCLWidgetType" Value="gtk2"/>
         </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
@@ -122,11 +87,74 @@
             </Options>
           </Linking>
         </CompilerOptions>
+      </Item3>
+      <Item4 Name="Windows_32">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="DebugTerminal_win32"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <TargetCPU Value="i386"/>
+            <TargetOS Value="win32"/>
+            <Optimizations>
+              <OptimizationLevel Value="2"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <StripSymbols Value="True"/>
+              <UseExternalDbgSyms Value="True"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+        </CompilerOptions>
       </Item4>
-      <SharedMatrixOptions Count="3">
+      <Item5 Name="Windows_64">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="DebugTerminal_win64"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <TargetCPU Value="x86_64"/>
+            <TargetOS Value="win64"/>
+            <Optimizations>
+              <OptimizationLevel Value="2"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <StripSymbols Value="True"/>
+              <UseExternalDbgSyms Value="True"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+        </CompilerOptions>
+      </Item5>
+      <SharedMatrixOptions Count="2">
         <Item1 ID="404658879269" Modes="Linux_64_Qt4" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt"/>
-        <Item2 ID="397802732726" Modes="Windows_32" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
-        <Item3 ID="009765853320" Modes="Linux_64_GTK" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item2 ID="009765853320" Modes="Linux_64_GTK" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
