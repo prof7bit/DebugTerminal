@@ -2,6 +2,7 @@
 /lib
 *.exe
 /DebugTerminal
+/DebugTerminal_lin*
 *.res
 *.lps
 *.ini

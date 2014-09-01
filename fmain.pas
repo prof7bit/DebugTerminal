@@ -594,8 +594,6 @@ begin
 end;
 
 procedure TFormMain.PlotInit;
-var
-  S: TLineSeries;
 begin
   Channel1.Clear;
   Channel2.Clear;
