@@ -31,6 +31,12 @@ send custom byte sequences with a simnple click of the mouse.
 Hex input is case insensitive and whitespace is ignored. Received data can be
 displayed as hex, binary or decimal.
 
+![Screen Shot](/screenshots/DebugTerminal_01.png?raw=true "Screen shot")
+![Screen Shot](/screenshots/DebugTerminal_02.png?raw=true "Screen shot")
+![Screen Shot](/screenshots/DebugTerminal_03.png?raw=true "Screen shot")
+![Screen Shot](/screenshots/DebugTerminal_04.png?raw=true "Screen shot")
+![Screen Shot](/screenshots/DebugTerminal_05.png?raw=true "Screen shot")
+![Screen Shot](/screenshots/DebugTerminal_06.png?raw=true "Screen shot")
 
 Download
 --------
