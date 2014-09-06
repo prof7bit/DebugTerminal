@@ -1,6 +1,9 @@
 DebugTerminal
 =============
 
+About
+-----
+
 DebugTerminal is a simple but very useful tool to help with embedded development. 
 Especially in devices that have a very limited user interface or none at all there
 sometimes is the need to watch or plot the value of a variable or even send simple 
@@ -27,3 +30,34 @@ send custom byte sequences with a simnple click of the mouse.
 
 Hex input is case insensitive and whitespace is ignored. Received data can be
 displayed as hex, binary or decimal.
+
+
+Download
+--------
+
+Please see the release section https://github.com/prof7bit/DebugTerminal/releases
+for latest builds for Windows and Linux. There exist 2 Linux builds, one using
+GTK2 and one using Qt4, the GTK build will run out of the box on any Linux 
+distribution, the Qt-build will need Qt4Pas installed (available through your
+distribution repositories). 
+
+Windows binaries also will run out of the box and not need any dependencies.
+
+
+Build it yourself
+-----------------
+
+You will need Lazarus and FPC. Linux users shold use fpcup (google it) to install
+it and NOT use the distribution packages (which will probably be horribly outdated
+or sometimes even outright broken). Alternatively you can download the .deb or .rpm
+packages from sourceforge and follow the installation instructions.
+
+Start Lazarus and open the project file (project -> open project -> DebugTerminal.lpi) 
+and then from the menu choose: run -> build which will give you the executable file
+a few seconds later.
+
+If the project inspector is not visible then open it (project -> project inspector) 
+to see an outline of the project and open source files for editing. 
+
+Please also consult the the Lazarus forums if you want to dive deeper into the usage 
+and possibilities of this powerful development environment.
