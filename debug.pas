@@ -45,7 +45,7 @@ begin
   {$endif}
 end;
 
-begin
+initialization
   RedirectStdOut;
 end.
 

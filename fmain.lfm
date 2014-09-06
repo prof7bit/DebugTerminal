@@ -1,44 +1,47 @@
 object FormMain: TFormMain
-  Left = 426
-  Height = 657
-  Top = 311
-  Width = 700
+  Left = 513
+  Height = 600
+  Top = 224
+  Width = 800
   Caption = 'Debug Terminal'
-  ClientHeight = 657
-  ClientWidth = 700
+  ClientHeight = 600
+  ClientWidth = 800
   Constraints.MinHeight = 500
-  Constraints.MinWidth = 700
+  Constraints.MinWidth = 800
   OnCreate = FormCreate
   Position = poScreenCenter
   LCLVersion = '1.3'
   object PageControl: TPageControl
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Side = asrBottom
+    AnchorSideBottom.Control = TbConnect
     Left = 0
-    Height = 626
+    Height = 565
     Top = 0
-    Width = 700
+    Width = 800
     ActivePage = TsTerminal
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Bottom = 76
+    BorderSpacing.Bottom = 5
     TabIndex = 0
     TabOrder = 0
     object TsTerminal: TTabSheet
       Caption = 'Terminal'
-      ClientHeight = 596
-      ClientWidth = 692
+      ClientHeight = 528
+      ClientWidth = 792
       object FInput: TEdit
         AnchorSideLeft.Control = TsTerminal
         AnchorSideRight.Control = CbEncodingSend
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 0
-        Height = 23
-        Top = 466
-        Width = 568
+        AnchorSideBottom.Control = Btn1
+        Left = 2
+        Height = 21
+        Top = 399
+        Width = 666
         Anchors = [akLeft, akRight, akBottom]
+        BorderSpacing.Left = 2
         BorderSpacing.Right = 10
-        BorderSpacing.Bottom = 107
+        BorderSpacing.Bottom = 6
         Enabled = False
         OnKeyDown = FInputKeyDown
         TabOrder = 0
@@ -46,30 +49,26 @@ object FormMain: TFormMain
       object Btn1: TButton
         Tag = 1
         AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
+        AnchorSideBottom.Control = Btn2
         Left = 2
         Height = 25
-        Top = 495
+        Top = 426
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
-        BorderSpacing.Bottom = 76
         Caption = 'Btn1'
         OnClick = Btn1Click
         TabOrder = 1
       end
       object BtnCfg1: TButton
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 142
+        AnchorSideLeft.Control = Btn1
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = BtnCfg2
+        Left = 141
         Height = 25
-        Top = 495
+        Top = 426
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 142
-        BorderSpacing.Bottom = 76
         Caption = '...'
         OnClick = BtnCfg1Click
         TabOrder = 2
@@ -77,30 +76,26 @@ object FormMain: TFormMain
       object Btn2: TButton
         Tag = 2
         AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
+        AnchorSideBottom.Control = Btn3
         Left = 2
         Height = 25
-        Top = 519
+        Top = 451
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
-        BorderSpacing.Bottom = 52
         Caption = 'Btn2'
         OnClick = Btn2Click
         TabOrder = 3
       end
       object BtnCfg2: TButton
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 142
+        AnchorSideLeft.Control = Btn2
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = BtnCfg3
+        Left = 141
         Height = 25
-        Top = 519
+        Top = 451
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 142
-        BorderSpacing.Bottom = 52
         Caption = '...'
         OnClick = BtnCfg2Click
         TabOrder = 4
@@ -108,30 +103,26 @@ object FormMain: TFormMain
       object Btn3: TButton
         Tag = 3
         AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
+        AnchorSideBottom.Control = Btn4
         Left = 2
         Height = 25
-        Top = 544
+        Top = 476
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
-        BorderSpacing.Bottom = 27
         Caption = 'Btn3'
         OnClick = Btn3Click
         TabOrder = 15
       end
       object BtnCfg3: TButton
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 142
+        AnchorSideLeft.Control = Btn3
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = BtnCfg4
+        Left = 141
         Height = 25
-        Top = 544
+        Top = 476
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 142
-        BorderSpacing.Bottom = 27
         Caption = '...'
         OnClick = BtnCfg3Click
         TabOrder = 16
@@ -143,7 +134,7 @@ object FormMain: TFormMain
         AnchorSideBottom.Side = asrBottom
         Left = 2
         Height = 25
-        Top = 569
+        Top = 501
         Width = 139
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 2
@@ -153,15 +144,15 @@ object FormMain: TFormMain
         TabOrder = 5
       end
       object BtnCfg4: TButton
-        AnchorSideLeft.Control = TsTerminal
+        AnchorSideLeft.Control = Btn4
+        AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 142
+        Left = 141
         Height = 25
-        Top = 569
+        Top = 501
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 142
         BorderSpacing.Bottom = 2
         Caption = '...'
         OnClick = BtnCfg4Click
@@ -169,123 +160,115 @@ object FormMain: TFormMain
       end
       object Btn5: TButton
         Tag = 5
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 180
+        AnchorSideLeft.Control = BtnCfg1
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = Btn6
+        Left = 175
         Height = 25
-        Top = 495
+        Top = 426
         Width = 139
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 180
-        BorderSpacing.Bottom = 76
+        BorderSpacing.Left = 10
         Caption = 'Btn5'
         OnClick = Btn5Click
         TabOrder = 7
       end
       object BtnCfg5: TButton
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 320
+        AnchorSideLeft.Control = Btn5
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = BtnCfg6
+        Left = 314
         Height = 25
-        Top = 495
+        Top = 426
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 320
-        BorderSpacing.Bottom = 76
         Caption = '...'
         OnClick = BtnCfg5Click
         TabOrder = 8
       end
       object Btn6: TButton
         Tag = 6
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 180
+        AnchorSideLeft.Control = BtnCfg2
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = Btn7
+        Left = 175
         Height = 25
-        Top = 519
+        Top = 451
         Width = 139
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 180
-        BorderSpacing.Bottom = 52
+        BorderSpacing.Left = 10
         Caption = 'Btn6'
         OnClick = Btn6Click
         TabOrder = 9
       end
       object BtnCfg6: TButton
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 320
+        AnchorSideLeft.Control = Btn6
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = BtnCfg7
+        Left = 314
         Height = 25
-        Top = 519
+        Top = 451
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 320
-        BorderSpacing.Bottom = 52
         Caption = '...'
         OnClick = BtnCfg6Click
         TabOrder = 10
       end
       object Btn7: TButton
         Tag = 7
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 180
+        AnchorSideLeft.Control = BtnCfg3
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = Btn8
+        Left = 175
         Height = 25
-        Top = 544
+        Top = 476
         Width = 139
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 180
-        BorderSpacing.Bottom = 27
+        BorderSpacing.Left = 10
         Caption = 'Btn7'
         OnClick = Btn7Click
         TabOrder = 11
       end
       object BtnCfg7: TButton
-        AnchorSideLeft.Control = TsTerminal
-        AnchorSideBottom.Control = TsTerminal
-        AnchorSideBottom.Side = asrBottom
-        Left = 320
+        AnchorSideLeft.Control = Btn7
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideBottom.Control = BtnCfg8
+        Left = 314
         Height = 25
-        Top = 544
+        Top = 476
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 320
-        BorderSpacing.Bottom = 27
         Caption = '...'
         OnClick = BtnCfg7Click
         TabOrder = 12
       end
       object Btn8: TButton
         Tag = 8
-        AnchorSideLeft.Control = TsTerminal
+        AnchorSideLeft.Control = BtnCfg4
+        AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 180
+        Left = 175
         Height = 25
-        Top = 569
+        Top = 501
         Width = 139
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 180
+        BorderSpacing.Left = 10
         BorderSpacing.Bottom = 2
         Caption = 'Btn8'
         OnClick = Btn8Click
         TabOrder = 13
       end
       object BtnCfg8: TButton
-        AnchorSideLeft.Control = TsTerminal
+        AnchorSideLeft.Control = Btn8
+        AnchorSideLeft.Side = asrBottom
         AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 320
+        Left = 314
         Height = 25
-        Top = 569
+        Top = 501
         Width = 24
         Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 320
         BorderSpacing.Bottom = 2
         Caption = '...'
         OnClick = BtnCfg8Click
@@ -299,9 +282,9 @@ object FormMain: TFormMain
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = FInput
         Left = 0
-        Height = 433
-        Top = 28
-        Width = 692
+        Height = 367
+        Top = 27
+        Width = 792
         BorderSpacing.Top = 2
         BorderSpacing.Bottom = 5
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -813,8 +796,8 @@ object FormMain: TFormMain
         AnchorSideTop.Control = TsTerminal
         AnchorSideRight.Control = TsTerminal
         AnchorSideRight.Side = asrBottom
-        Left = 578
-        Height = 24
+        Left = 678
+        Height = 23
         Top = 2
         Width = 112
         Anchors = [akTop, akRight]
@@ -834,16 +817,17 @@ object FormMain: TFormMain
         Text = 'Hex'
       end
       object CbEncodingSend: TComboBox
-        AnchorSideTop.Control = TsTerminal
+        AnchorSideTop.Control = FInput
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = TsTerminal
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = TsTerminal
         AnchorSideBottom.Side = asrBottom
-        Left = 578
-        Height = 24
-        Top = 465
+        Left = 678
+        Height = 23
+        Top = 398
         Width = 112
-        Anchors = [akRight, akBottom]
+        Anchors = [akTop, akRight]
         BorderSpacing.Right = 2
         BorderSpacing.Bottom = 107
         ItemHeight = 0
@@ -860,20 +844,20 @@ object FormMain: TFormMain
     end
     object TsPlot: TTabSheet
       Caption = 'Plot'
-      ClientHeight = 598
-      ClientWidth = 692
+      ClientHeight = 528
+      ClientWidth = 792
       object Chart: TChart
         AnchorSideLeft.Control = TsPlot
-        AnchorSideTop.Control = BtnClear
+        AnchorSideTop.Control = TrackZoom
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = TsPlot
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = TsPlot
         AnchorSideBottom.Side = asrBottom
         Left = 0
-        Height = 571
-        Top = 27
-        Width = 692
+        Height = 480
+        Top = 48
+        Width = 792
         AntialiasingMode = amOn
         AxisList = <        
           item
@@ -913,11 +897,13 @@ object FormMain: TFormMain
       end
       object SpinChannels: TSpinEdit
         AnchorSideLeft.Control = TsPlot
-        AnchorSideTop.Control = TsPlot
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = LblBits
-        Left = 371
-        Height = 23
-        Top = 2
+        AnchorSideBottom.Control = TrackZoom
+        Left = 392
+        Height = 21
+        Top = 15
         Width = 50
         Anchors = [akTop, akRight]
         BorderSpacing.Top = 2
@@ -930,12 +916,15 @@ object FormMain: TFormMain
       end
       object LblChannels: TLabel
         AnchorSideLeft.Control = TsPlot
-        AnchorSideTop.Control = TsPlot
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = SpinChannels
-        Left = 312
+        AnchorSideBottom.Control = TrackZoom
+        AnchorSideBottom.Side = asrCenter
+        Left = 331
         Height = 15
-        Top = 6
-        Width = 49
+        Top = 18
+        Width = 51
         Anchors = [akTop, akRight]
         BorderSpacing.Top = 6
         BorderSpacing.Right = 10
@@ -943,25 +932,32 @@ object FormMain: TFormMain
         ParentColor = False
       end
       object LblBits: TLabel
-        AnchorSideTop.Control = TsPlot
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = SpinBits
-        Left = 441
+        AnchorSideBottom.Control = TrackZoom
+        AnchorSideBottom.Side = asrBottom
+        Left = 462
         Height = 15
-        Top = 6
-        Width = 19
+        Top = 18
+        Width = 23
         Anchors = [akTop, akRight]
         BorderSpacing.Top = 6
         BorderSpacing.Right = 10
         Caption = 'Bits'
+        Layout = tlCenter
         ParentColor = False
       end
       object SpinBits: TSpinEdit
-        AnchorSideTop.Control = TsPlot
-        AnchorSideRight.Control = BtnSync
-        Left = 470
-        Height = 23
-        Top = 2
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = CheckBoxSigned
+        AnchorSideBottom.Control = TrackZoom
+        Left = 495
+        Height = 21
+        Top = 15
         Width = 50
+        Alignment = taRightJustify
         Anchors = [akTop, akRight]
         BorderSpacing.Top = 2
         BorderSpacing.Right = 10
@@ -973,11 +969,14 @@ object FormMain: TFormMain
         Value = 8
       end
       object BtnSync: TButton
-        AnchorSideTop.Control = TsPlot
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = BtnClear
-        Left = 530
-        Height = 25
-        Top = 2
+        AnchorSideBottom.Control = TrackZoom
+        AnchorSideBottom.Side = asrBottom
+        Left = 630
+        Height = 26
+        Top = 12
         Width = 75
         Anchors = [akTop, akRight]
         BorderSpacing.Top = 2
@@ -988,12 +987,15 @@ object FormMain: TFormMain
       end
       object BtnClear: TButton
         AnchorSideLeft.Control = TsPlot
-        AnchorSideTop.Control = TsPlot
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = TsPlot
         AnchorSideRight.Side = asrBottom
-        Left = 615
-        Height = 25
-        Top = 2
+        AnchorSideBottom.Control = TrackZoom
+        AnchorSideBottom.Side = asrBottom
+        Left = 715
+        Height = 26
+        Top = 12
         Width = 75
         Anchors = [akTop, akRight]
         BorderSpacing.Top = 2
@@ -1008,43 +1010,71 @@ object FormMain: TFormMain
         AnchorSideTop.Control = TsPlot
         AnchorSideRight.Control = LblChannels
         Left = 52
-        Height = 25
+        Height = 46
         Top = 2
-        Width = 240
+        Width = 259
         Max = 100
         OnChange = TrackZoomChange
         PageSize = 1
         Position = 0
+        ScalePos = trLeft
+        ShowSelRange = False
         TickStyle = tsNone
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
         BorderSpacing.Right = 20
+        Constraints.MaxHeight = 25
+        Constraints.MinHeight = 25
         TabOrder = 5
       end
       object LblZoom: TLabel
         AnchorSideLeft.Control = TsPlot
-        AnchorSideTop.Control = TsPlot
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
         AnchorSideRight.Control = TrackZoom
+        AnchorSideBottom.Control = TrackZoom
+        AnchorSideBottom.Side = asrCenter
         Left = 10
         Height = 15
-        Top = 6
+        Top = 18
         Width = 32
         BorderSpacing.Left = 10
         BorderSpacing.Top = 6
         BorderSpacing.Right = 10
         Caption = 'Zoom'
+        Layout = tlCenter
         ParentColor = False
+      end
+      object CheckBoxSigned: TCheckBox
+        AnchorSideTop.Control = TrackZoom
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = BtnSync
+        AnchorSideBottom.Control = TrackZoom
+        AnchorSideBottom.Side = asrBottom
+        Left = 555
+        Height = 26
+        Top = 12
+        Width = 65
+        Anchors = [akTop, akRight]
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        Caption = 'Signed'
+        OnChange = CheckBoxSignedChange
+        TabOrder = 6
       end
     end
   end
   object CbPort: TComboBox
+    AnchorSideTop.Control = TbConnect
+    AnchorSideTop.Side = asrCenter
     AnchorSideBottom.Side = asrBottom
     Left = 40
-    Height = 24
-    Top = 628
+    Height = 25
+    Top = 570
     Width = 124
-    Anchors = [akLeft, akBottom]
+    Constraints.MaxHeight = 25
+    Constraints.MinHeight = 25
     ItemHeight = 0
     OnChange = CbPortChange
     OnGetItems = CbPortGetItems
@@ -1052,22 +1082,28 @@ object FormMain: TFormMain
     TabOrder = 1
   end
   object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = TbConnect
+    AnchorSideTop.Side = asrCenter
     AnchorSideBottom.Side = asrBottom
-    Left = 10
+    Left = 5
     Height = 15
-    Top = 634
+    Top = 575
     Width = 25
-    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 5
     Caption = 'Port'
     ParentColor = False
   end
   object CbBaud: TComboBox
+    AnchorSideTop.Control = TbConnect
+    AnchorSideTop.Side = asrCenter
     AnchorSideBottom.Side = asrBottom
     Left = 232
-    Height = 24
-    Top = 628
+    Height = 25
+    Top = 570
     Width = 100
-    Anchors = [akLeft, akBottom]
+    Constraints.MaxHeight = 25
+    Constraints.MinHeight = 25
     ItemHeight = 0
     ItemIndex = 0
     Items.Strings = (
@@ -1098,37 +1134,44 @@ object FormMain: TFormMain
     Text = '50'
   end
   object Label2: TLabel
+    AnchorSideTop.Control = TbConnect
+    AnchorSideTop.Side = asrCenter
     AnchorSideBottom.Side = asrBottom
     Left = 192
     Height = 15
-    Top = 634
+    Top = 575
     Width = 28
-    Anchors = [akLeft, akBottom]
     Caption = 'Baud'
     ParentColor = False
   end
   object TbConnect: TToggleBox
+    AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 582
-    Height = 23
-    Top = 629
+    Left = 683
+    Height = 25
+    Top = 570
     Width = 112
     Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 5
+    BorderSpacing.Bottom = 5
     Caption = 'Connect'
+    Constraints.MaxHeight = 25
+    Constraints.MinHeight = 25
     OnChange = TbConnectChange
     TabOrder = 3
   end
   object IniProp: TIniPropStorage
     StoredValues = <>
     IniFileName = 'DebugTerminal.ini'
-    left = 80
-    top = 72
+    left = 120
+    top = 128
   end
   object Timer: TTimer
     Interval = 50
     OnTimer = TimerTimer
-    left = 168
-    top = 72
+    left = 216
+    top = 128
   end
 end

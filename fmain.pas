@@ -21,30 +21,14 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage,
-  ComPort, FConfigButton, LCLType, ExtCtrls, Spin, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage, ComPort,
+  FConfigButton, LCLType, ExtCtrls, Spin, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
   TAChartUtils, Math;
 
 const
   HISTSIZE = 100;
 
 type
-
-  TPlotData16 = record
-    Channel1: UInt16;
-    Channel2: UInt16;
-    Channel3: UInt16;
-    Channel4: UInt16;
-  end;
-
-  PPlotData8 = ^TPlotData8;
-  TPlotData8 = record
-    Channel1: UInt8;
-    Channel2: UInt8;
-    Channel3: UInt8;
-    Channel4: UInt8;
-  end;
-
   TPlotDataRaw = array[0..7] of Byte;
 
   { THistory }
@@ -98,6 +82,7 @@ type
     Channel2: TLineSeries;
     Channel3: TLineSeries;
     Channel4: TLineSeries;
+    CheckBoxSigned: TCheckBox;
     IniProp: TIniPropStorage;
     FOutput: TSynEdit;
     LblChannels: TLabel;
@@ -137,6 +122,7 @@ type
     procedure CbEncodingSendChange(Sender: TObject);
     procedure CbPortChange(Sender: TObject);
     procedure CbPortGetItems(Sender: TObject);
+    procedure CheckBoxSignedChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure SpinBitsChange(Sender: TObject);
     procedure SpinChannelsChange(Sender: TObject);
@@ -321,7 +307,7 @@ begin
       end
     end
     else begin
-      Sleep(1);
+      Sleep(50);
     end;
   until Terminated;
 end;
@@ -335,6 +321,12 @@ begin
   sel := CbPort.Text;
   EnumerateSerialPorts(CbPort.Items);
   CbPort.Text := sel;
+end;
+
+procedure TFormMain.CheckBoxSignedChange(Sender: TObject);
+begin
+  IniWrite('Plot', 'Signed', IntToStr(Integer(CheckBoxSigned.Checked)));
+  BtnClearClick(Sender);
 end;
 
 procedure TFormMain.BtnCfg1Click(Sender: TObject);
@@ -478,6 +470,7 @@ begin
   TrackZoom.Position := IniReadInt('Plot', 'Zoom', 40);
   SpinChannels.Value := IniReadInt('Plot', 'Channels', 1);
   SpinBits.Value := IniReadInt('Plot', 'Bits', 8);
+  CheckBoxSigned.Checked := Bool(IniReadInt('Plot', 'Signed', 0));
   PlotDataByteCount := 0;
   PlotInit;
   RxLock := TCriticalSection.Create;
@@ -487,11 +480,13 @@ end;
 procedure TFormMain.SpinBitsChange(Sender: TObject);
 begin
   IniWrite('Plot', 'Bits', IntToStr(SpinBits.Value));
+  BtnClearClick(Sender);
 end;
 
 procedure TFormMain.SpinChannelsChange(Sender: TObject);
 begin
   IniWrite('Plot', 'Channels', IntToStr(SpinChannels.Value));
+  BtnClearClick(Sender);
 end;
 
 procedure TFormMain.TbConnectChange(Sender: TObject);
@@ -605,39 +600,34 @@ end;
 
 procedure TFormMain.PlotAddByte(B: Byte);
 var
+  BytesPerSample: Byte;
+  Signed: Boolean;
   FrameSize: Byte;
-  Channels: TPlotData16;
-  Plotdata8: PPlotData8;
+  Value: LongInt;
+  I: Byte;
 begin
-  FrameSize := (SpinBits.Value div 8) * SpinChannels.Value;
+  BytesPerSample := SpinBits.Value div 8;
+  Signed := CheckBoxSigned.Checked;
+  FrameSize := BytesPerSample * SpinChannels.Value;
   PlotDataRaw[PlotDataByteCount] := B;
   PlotDataByteCount += 1;
   if PlotDataByteCount = FrameSize then begin
-    case SpinBits.Value of
-      8: begin
-        Plotdata8 := PPlotData8(@PlotDataRaw);
-        Channels.Channel1 := Plotdata8^.Channel1;
-        Channels.Channel2 := Plotdata8^.Channel2;
-        Channels.Channel3 := Plotdata8^.Channel3;
-        Channels.Channel4 := Plotdata8^.Channel4;
-      end;
-      16: begin
-        Channels := TPlotData16(PlotDataRaw);
-      end;
+    for I := 0 to SpinChannels.Value-1 do begin
+      if BytesPerSample = 1 then
+        if Signed then
+          Value := Int8(PlotDataRaw[I])
+        else
+          Value := UInt8(PlotDataRaw[I])
+      else
+        if Signed then
+          Value := PInt16(@PlotDataRaw[I shl 1])^
+        else
+          Value := PUInt16(@PlotDataRaw[I shl 1])^;
+
+      TLineSeries(Chart.Series.Items[I]).AddXY(PlotX, Value);
     end;
-
-    Channel1.AddXY(PlotX, Channels.Channel1);
-    if SpinChannels.Value > 1 then
-      Channel2.AddXY(PlotX, Channels.Channel2);
-    if SpinChannels.Value > 2 then
-      Channel3.AddXY(PlotX, Channels.Channel3);
-    if SpinChannels.Value > 3 then
-      Channel4.AddXY(PlotX, Channels.Channel4);
-
     PlotX += 1;
-
     PlotApplyZoom;
-
     PlotDataByteCount := 0;
   end;
 end;
