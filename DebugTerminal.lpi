@@ -14,7 +14,11 @@
       <EnableI18N LFM="False"/>
     </i18n>
     <VersionInfo>
-      <StringTable ProductVersion=""/>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="1"/>
+      <BuildNr Value="10"/>
+      <StringTable CompanyName="Bernd Kreuss" FileDescription="serial terminal for embedded developmment" InternalName="DebugTerminal" OriginalFilename="DebugTerminal" ProductName="DebugTerminal" ProductVersion="1.0"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
@@ -201,6 +205,7 @@
       <Unit4>
         <Filename Value="debug.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Debug"/>
       </Unit4>
       <Unit5>
         <Filename Value="fconfigbutton.pas"/>
@@ -208,7 +213,6 @@
         <ComponentName Value="FormConfigButton"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="FConfigButton"/>
       </Unit5>
     </Units>
   </ProjectOptions>
