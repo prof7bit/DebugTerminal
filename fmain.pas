@@ -300,7 +300,7 @@ procedure TReceiver.Execute;
 begin
   repeat
     if FormMain.ComPort.IsOpen then begin
-      if FormMain.ComPort.Receice(50, ReceiveByte) = 1 then begin
+      if FormMain.ComPort.Receive(50, ReceiveByte) = 1 then begin
         FormMain.RxLock.Acquire;
         FormMain.RxBuf += Chr(ReceiveByte);
         FormMain.RxLock.Release;
