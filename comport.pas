@@ -1,4 +1,4 @@
-{ simple wrapper around serial.pp
+{ simple wrapper around synaser, making it thread safe
 
   Copyright (C) 2014 Bernd Kreuss <prof7bit@gmail.com>
 
@@ -28,17 +28,7 @@ unit ComPort;
 interface
 
 uses
-  {$ifdef windows}
-  windows,
-    {$if FPC_FULLVERSION < 20701}
-      Serial_fpctrunk,
-    {$else}
-      Serial,
-    {$endif}
-  {$else}
-  Serial,
-  {$endif}
-  Classes, sysutils;
+  synaser, Classes, sysutils, syncobjs;
 
 type
   { TSimpleComPort }
@@ -51,19 +41,20 @@ type
     procedure Send(B: Byte);
     procedure Send(var Buffer; Count: LongInt);
     procedure Send(Text: String);
-    function Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
+    function Receive(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
     procedure Close;
   private
-    FHandle: THandle;
+    FLock: TCriticalSection;
+    FSerial: TBlockSerial;
     FIsOpen: Boolean;
   public
-    property Handle: THandle read FHandle;
     property IsOpen: Boolean read FIsOpen;
   end;
 
 procedure EnumerateSerialPorts(List: TStrings);
 
 implementation
+
 
 {$ifdef linux}
 procedure EnumSerial_Linux(List: TStrings);
@@ -115,26 +106,21 @@ begin
   List.EndUpdate;
 end;
 
-function ParityTypeFromChar(C: Char): TParityType;
-begin
-  case C of
-    'N': Result := NoneParity;
-    'O': Result := OddParity;
-    'E': Result := EvenParity;
-  end;
-end;
-
 { TSimpleComPort }
 
 constructor TSimpleComPort.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FLock := TCriticalSection.Create;
+  FSerial := TBlockSerial.Create;
   FIsOpen := False;
 end;
 
 destructor TSimpleComPort.Destroy;
 begin
   Close;
+  FSerial.Free;
+  FLock.Free;
   inherited Destroy;
 end;
 
@@ -143,14 +129,14 @@ begin
   if IsOpen then
     Result := True
   else begin
-    {$ifdef windows}
-    Port := '\\.\' + Port;
-    {$endif}
-    FHandle := SerOpen(Port);
-    if (FHandle <> THandle(-1)) and (FHandle <> 0) then begin
-      SerSetParams(FHandle, Baud, Bits, ParityTypeFromChar(Parity), StopBits, []);
-      Result := True;
+    {$IFDEF UNIX}
+    FSerial.cpomReleaseComport;  // Lukas, this lockfile was a bad idea :-(
+    {$ENDIF}
+    FSerial.Connect(Port);
+    if FSerial.LastError = 0 then begin
+      FSerial.Config(Baud, Bits, Parity, StopBits, False, False);
       FIsOpen := True;
+      Result := True;
     end
     else
       Result := False;
@@ -165,8 +151,9 @@ end;
 procedure TSimpleComPort.Send(var Buffer; Count: LongInt);
 begin
   if IsOpen then begin
-    SerWrite(FHandle, Buffer, Count);
-    {%H-}SerFlush(FHandle);
+    FLock.Acquire;
+    FSerial.SendBuffer(@Buffer, Count);
+    FLock.Release;
   end;
 end;
 
@@ -175,27 +162,25 @@ begin
   Send(Text[1], Length(Text));
 end;
 
-function TSimpleComPort.Receice(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
-const
-  MILLI_PER_DAY = 1000 * 60 * 60 * 24;
-var
-  TimeoutTime: Double;
+function TSimpleComPort.Receive(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
 begin
-  TimeoutTime := Now + TimeoutMilli / MILLI_PER_DAY;
-  repeat
-    Result := SerRead(FHandle, RecvByte, 1);
-    if Result = 1 then break;
-    Sleep(1);
-  until Now > TimeoutTime;
+  Result := 0;
+  if IsOpen then begin
+    FLock.Acquire;
+    RecvByte := FSerial.RecvByte(TimeoutMilli);
+    if FSerial.LastError = 0 then
+      Result := 1;
+    FLock.Release;
+  end;
 end;
 
 procedure TSimpleComPort.Close;
 begin
   if FIsOpen then begin
-    SerClose(FHandle);
+    FSerial.CloseSocket;
     FIsOpen := False;
   end;
 end;
 
 end.
-
+
