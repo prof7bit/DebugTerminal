@@ -28,6 +28,9 @@ unit ComPort;
 interface
 
 uses
+  {$ifdef windows}
+  windows,
+  {$endif}
   synaser, Classes, sysutils, syncobjs;
 
 type
