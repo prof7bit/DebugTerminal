@@ -163,6 +163,7 @@ type
   { TReceiver }
 
   TReceiver = class(TThread)
+    MainStdOut: Text;
     constructor Create();
     procedure Execute; override;
   end;
@@ -294,12 +295,20 @@ end;
 constructor TReceiver.Create;
 begin
   inherited Create(False);
+  MainStdOut := Output;
 end;
 
 procedure TReceiver.Execute;
 var
   ReceivedByte: Byte;
 begin
+  // the debug unit redirects stdout on windows but every thread gets its own
+  // stdout, so we must point this thread's stdout to the redirected one too
+  // for the writeln() inside this thread to work on windows.
+  Output := MainStdOut;
+
+  // infinite loop to append every received byte to RxBuf.
+  // The main thread will then periodically poll RxBuf.
   repeat
     if FormMain.ComPort.IsOpen then begin
       if FormMain.ComPort.ReceiveByte(50, ReceivedByte) = 1 then begin
