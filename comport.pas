@@ -1,4 +1,4 @@
-{ simple wrapper around synaser, making it thread safe
+{ simple wrapper for serial.pp on unix and implementation of serial.pp for windows
 
   Copyright (C) 2014 Bernd Kreuss <prof7bit@gmail.com>
 
@@ -30,8 +30,10 @@ interface
 uses
   {$ifdef windows}
   windows,
+  {$else}
+  Serial
   {$endif}
-  synaser, Classes, sysutils, syncobjs;
+  Classes, sysutils;
 
 type
   { TSimpleComPort }
@@ -47,8 +49,7 @@ type
     function Receive(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
     procedure Close;
   private
-    FLock: TCriticalSection;
-    FSerial: TBlockSerial;
+    FHandle: THandle;
     FIsOpen: Boolean;
   public
     property IsOpen: Boolean read FIsOpen;
@@ -114,16 +115,12 @@ end;
 constructor TSimpleComPort.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FLock := TCriticalSection.Create;
-  FSerial := TBlockSerial.Create;
   FIsOpen := False;
 end;
 
 destructor TSimpleComPort.Destroy;
 begin
   Close;
-  FSerial.Free;
-  FLock.Free;
   inherited Destroy;
 end;
 
@@ -132,17 +129,6 @@ begin
   if IsOpen then
     Result := True
   else begin
-    {$IFDEF UNIX}
-    FSerial.cpomReleaseComport;  // Lukas, this lockfile was a bad idea :-(
-    {$ENDIF}
-    FSerial.Connect(Port);
-    if FSerial.LastError = 0 then begin
-      FSerial.Config(Baud, Bits, Parity, StopBits, False, False);
-      FIsOpen := True;
-      Result := True;
-    end
-    else
-      Result := False;
   end;
 end;
 
@@ -154,9 +140,6 @@ end;
 procedure TSimpleComPort.Send(var Buffer; Count: LongInt);
 begin
   if IsOpen then begin
-    FLock.Acquire;
-    FSerial.SendBuffer(@Buffer, Count);
-    FLock.Release;
   end;
 end;
 
@@ -169,21 +152,15 @@ function TSimpleComPort.Receive(TimeoutMilli: Integer; var RecvByte: Byte): Long
 begin
   Result := 0;
   if IsOpen then begin
-    FLock.Acquire;
-    RecvByte := FSerial.RecvByte(TimeoutMilli);
-    if FSerial.LastError = 0 then
-      Result := 1;
-    FLock.Release;
   end;
 end;
 
 procedure TSimpleComPort.Close;
 begin
   if FIsOpen then begin
-    FSerial.CloseSocket;
     FIsOpen := False;
   end;
 end;
 
 end.
-
+
