@@ -133,7 +133,8 @@ type
   private
     Receiver: TReceiver;
     History: THistory;
-    procedure OutputAddByte(B: Byte);
+    OutputNewText: String;
+    procedure OutputPrepareAddByte(B: Byte);
     procedure OutputLineBreak;
     procedure PlotApplyZoom;
     procedure PlotInit;
@@ -503,16 +504,24 @@ end;
 procedure TFormMain.TimerTimer(Sender: TObject);
 var
   C: Char;
+  Buf: String;
 begin
   RxLock.Acquire;
-  FOutput.BeginUpdate(False);
-  for C in RxBuf do begin
-    OutputAddByte(Ord(C));
-    PlotAddByte(Ord(C));
-  end;
-  FOutput.EndUpdate;
+  Buf := RxBuf;
   SetLength(RxBuf, 0);
   RxLock.Release;
+  Chart.DisableRedrawing;
+  Chart.DisableAutoSizing;
+  for C in Buf do begin
+    OutputPrepareAddByte(Ord(C));
+    PlotAddByte(Ord(C));
+  end;
+  FOutput.ExecuteCommand(ecEditorBottom, '', nil);
+  FOutput.InsertTextAtCaret(OutputNewText);
+  SetLength(OutputNewText, 0);
+  Chart.EnableAutoSizing;
+  Chart.EnableRedrawing;
+  PlotApplyZoom;
 end;
 
 procedure TFormMain.FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -538,7 +547,11 @@ begin
   IniWrite('Plot', 'Zoom', IntToStr(TrackZoom.Position));
 end;
 
-procedure TFormMain.OutputAddByte(B: Byte);
+{ Its not added to the text control directly,
+  instead we first collect all the new bytes
+  in a string and then latter in a separate
+  method we add it all at once }
+procedure TFormMain.OutputPrepareAddByte(B: Byte);
 var
   S: String;
   L1, L2: Integer;
@@ -559,20 +572,19 @@ begin
       L2 := 8;
     end;
   end;
-  FOutput.ExecuteCommand(ecEditorBottom, '', nil);
-  FOutput.InsertTextAtCaret(S);
+  OutputNewText += S;
   RxByteColumn += 1;
   if RxByteColumn = L1 then begin
-    FOutput.InsertTextAtCaret('  ');
+    OutputNewText += '  ';
   end;
   if RxByteColumn >= L2 then begin
-    OutputLineBreak;
+    OutputNewText += LineEnding;
+    RxByteColumn := 0;
   end;
 end;
 
 procedure TFormMain.OutputLineBreak;
 begin
-  FOutput.ExecuteCommand(ecEditorBottom, '', nil);
   FOutput.InsertTextAtCaret(LineEnding);
   RxByteColumn := 0;
 end;
@@ -627,7 +639,6 @@ begin
       TLineSeries(Chart.Series.Items[I]).AddXY(PlotX, Value);
     end;
     PlotX += 1;
-    PlotApplyZoom;
     PlotDataByteCount := 0;
   end;
 end;
@@ -638,6 +649,7 @@ begin
   if ComPort.IsOpen then begin
     TbConnect.State := cbChecked;
     TbConnect.Caption := 'Disconnect';
+    FOutput.ExecuteCommand(ecEditorBottom, '', nil);
     OutputLineBreak;
     OutputLineBreak;
     if FInput.IsVisible then begin
@@ -676,6 +688,7 @@ begin
   L := Length(S) div 2;
   Getmem(Buf, L);
   if HexToBin(PChar(S), Buf, L) = L then begin
+    FOutput.ExecuteCommand(ecEditorBottom, '', nil);
     OutputLineBreak;
     ComPort.Send(Buf^, L);
     Result := True;
