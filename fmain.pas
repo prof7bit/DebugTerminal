@@ -163,7 +163,6 @@ type
   { TReceiver }
 
   TReceiver = class(TThread)
-    ReceiveByte: Byte;
     constructor Create();
     procedure Execute; override;
   end;
@@ -298,12 +297,14 @@ begin
 end;
 
 procedure TReceiver.Execute;
+var
+  ReceivedByte: Byte;
 begin
   repeat
     if FormMain.ComPort.IsOpen then begin
-      if FormMain.ComPort.Receive(50, ReceiveByte) = 1 then begin
+      if FormMain.ComPort.ReceiveByte(50, ReceivedByte) = 1 then begin
         FormMain.RxLock.Acquire;
-        FormMain.RxBuf += Chr(ReceiveByte);
+        FormMain.RxBuf += Chr(ReceivedByte);
         FormMain.RxLock.Release;
       end
     end

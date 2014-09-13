@@ -30,8 +30,9 @@ interface
 uses
   {$ifdef windows}
   windows,
-  {$else}
-  Serial
+  {$endif}
+  {$ifdef unix}
+  Serial,
   {$endif}
   Classes, sysutils;
 
@@ -43,10 +44,10 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function Open(Port: String; Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer): Boolean;
-    procedure Send(B: Byte);
-    procedure Send(var Buffer; Count: LongInt);
-    procedure Send(Text: String);
-    function Receive(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
+    function Send(B: Byte): LongInt;
+    function Send(var Buffer; Count: LongInt): LongInt;
+    function Send(Text: String): LongInt;
+    function ReceiveByte(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
     procedure Close;
   private
     FHandle: THandle;
@@ -58,7 +59,10 @@ type
 procedure EnumerateSerialPorts(List: TStrings);
 
 implementation
-
+{$ifdef unix}
+uses
+  baseunix;
+{$endif}
 
 {$ifdef linux}
 procedure EnumSerial_Linux(List: TStrings);
@@ -110,6 +114,24 @@ begin
   List.EndUpdate;
 end;
 
+{$ifdef unix}
+{$if FPC_FULLVERSION < 20700} // old fpc without SerReadTimeout()
+function SerReadTimeout(Handle: TSerialHandle; var Buffer; mSec: LongInt): LongInt;
+var
+  readSet: TFDSet;
+  selectTimeout: TTimeVal;
+begin
+  fpFD_ZERO(readSet);
+  fpFD_SET(Handle, readSet);
+  selectTimeout.tv_sec := mSec div 1000;
+  selectTimeout.tv_usec := (mSec mod 1000) * 1000;
+  result := 0;
+  if fpSelect(Handle + 1, @readSet, nil, nil, @selectTimeout) > 0 then
+    result := fpRead(Handle, Buffer, 1)
+end;
+{$endif} // old fpc without SerReadTimeout()
+{$endif} // unix
+
 { TSimpleComPort }
 
 constructor TSimpleComPort.Create(AOwner: TComponent);
@@ -125,42 +147,61 @@ begin
 end;
 
 function TSimpleComPort.Open(Port: String; Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer): Boolean;
+var
+  Par: TParityType;
 begin
   if IsOpen then
     Result := True
   else begin
+    Result := False;
+    FHandle := SerOpen(POrt);
+    if FHandle > 0 then begin
+      case Parity of
+        'N': Par := NoneParity;
+        'E': Par := EvenParity;
+        'O': Par := OddParity;
+      end;
+      SerSetParams(FHandle, Baud, Bits, Par, StopBits, []);
+      Result := True;
+      FIsOpen := True;
+    end;
   end;
 end;
 
-procedure TSimpleComPort.Send(B: Byte);
+function TSimpleComPort.Send(B: Byte): LongInt;
 begin
-  Send(B, 1);
+  Result := Send(B, 1);
 end;
 
-procedure TSimpleComPort.Send(var Buffer; Count: LongInt);
+function TSimpleComPort.Send(var Buffer; Count: LongInt): LongInt;
 begin
   if IsOpen then begin
-  end;
+    Result := SerWrite(FHandle, Buffer, Count);
+  end
+  else
+    Result := 0;
 end;
 
-procedure TSimpleComPort.Send(Text: String);
+function TSimpleComPort.Send(Text: String): LongInt;
 begin
-  Send(Text[1], Length(Text));
+  Result := Send(Text[1], Length(Text));
 end;
 
-function TSimpleComPort.Receive(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
+function TSimpleComPort.ReceiveByte(TimeoutMilli: Integer; var RecvByte: Byte): LongInt;
 begin
   Result := 0;
   if IsOpen then begin
+    Result := SerReadTimeout(FHandle, RecvByte, TimeoutMilli);
   end;
 end;
 
 procedure TSimpleComPort.Close;
 begin
   if FIsOpen then begin
+    SerClose(FHandle);
     FIsOpen := False;
   end;
 end;
 
 end.
-
+
