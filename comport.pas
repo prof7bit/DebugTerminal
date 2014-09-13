@@ -28,12 +28,6 @@ unit ComPort;
 interface
 
 uses
-  {$ifdef windows}
-  windows,
-  {$endif}
-  {$ifdef unix}
-  Serial,
-  {$endif}
   Classes, sysutils;
 
 type
@@ -59,10 +53,13 @@ type
 procedure EnumerateSerialPorts(List: TStrings);
 
 implementation
-{$ifdef unix}
 uses
-  baseunix;
-{$endif}
+  {$ifdef windows}
+  windows;
+  {$endif}
+  {$ifdef unix}
+  baseunix, Serial;
+  {$endif}
 
 {$ifdef linux}
 procedure EnumSerial_Linux(List: TStrings);
@@ -131,6 +128,16 @@ begin
 end;
 {$endif} // old fpc without SerReadTimeout()
 {$endif} // unix
+
+{$ifdef windows}
+// windows has no working serial.pp and the new implementation in FPC trunk
+// does not (yet) use overlapped IO and unfortunately it seems that not using
+// overlapped IO for SerReadTimeout() will not work properly, so I have to
+// implement the needed functions of serial.pp for windows from scratch.
+
+
+{$endif} // windows
+
 
 { TSimpleComPort }
 
