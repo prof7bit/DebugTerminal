@@ -164,6 +164,7 @@ const   bufSize= 2048;
         // dcb_AbortOnError     = $00004000;
 
 var     DCB: TDCB;
+        Timeouts: TCommTimeouts;
 
 begin
   result := true;
@@ -190,6 +191,16 @@ begin
     DCB.Flags := DCB.Flags or dcb_OutxCtsFlow or
                 (dcb_RtsControl and (RTS_CONTROL_HANDSHAKE shl 12));
   if not SetCommState(Handle, DCB) then
+    result := false;
+  if GetCommTimeouts(Handle, Timeouts) then begin
+    Timeouts.ReadIntervalTimeout := MAXDWORD;
+    Timeouts.ReadTotalTimeoutMultiplier := 0;
+    Timeouts.ReadTotalTimeoutConstant := 0;
+    Timeouts.WriteTotalTimeoutMultiplier := 0;
+    Timeouts.WriteTotalTimeoutConstant := 30000;
+    if not SetCommTimeouts(Handle, Timeouts) then
+      result := false
+  end else
     result := false;
   if not SetupComm(Handle, bufSize, bufSize) then
     result := false
