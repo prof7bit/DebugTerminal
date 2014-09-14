@@ -247,7 +247,8 @@ var
 begin
   FillChar(Overlapped{%H-}, SizeOf(Overlapped), 0);
   WriteFile(Handle, Buffer, Count, BytesWritten{%H-}, @Overlapped);
-  Result := Count; // assume (for now) it will always succeed; FIXME?
+  GetOverlappedResult(Handle, Overlapped, BytesWritten, True);
+  Result := BytesWritten;
 end { SerWrite } ;
 
 

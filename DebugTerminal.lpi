@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="24"/>
+      <BuildNr Value="26"/>
       <StringTable CompanyName="Bernd Kreuss" FileDescription="serial terminal for embedded developmment" InternalName="DebugTerminal" OriginalFilename="DebugTerminal" ProductName="DebugTerminal" ProductVersion="1.0"/>
     </VersionInfo>
     <BuildModes Count="5">
