@@ -288,6 +288,8 @@ object FormMain: TFormMain
         BorderSpacing.Top = 2
         BorderSpacing.Bottom = 5
         Anchors = [akTop, akLeft, akRight, akBottom]
+        Color = clWindow
+        Font.Color = clWindowText
         Font.Height = -13
         Font.Name = 'Courier New'
         Font.Pitch = fpFixed
