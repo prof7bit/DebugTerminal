@@ -38,6 +38,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function Open(Port: String; Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer): Boolean;
+    procedure Reconfigure(Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer);
     function Send(B: Byte): LongInt;
     function Send(var Buffer; Count: LongInt): LongInt;
     function Send(Text: String): LongInt;
@@ -311,24 +312,31 @@ begin
 end;
 
 function TSimpleComPort.Open(Port: String; Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer): Boolean;
-var
-  Par: TParityType;
 begin
   if IsOpen then
     Result := True
   else begin
     Result := False;
-    FHandle := SerOpen(POrt);
+    FHandle := SerOpen(Port);
     if FHandle > 0 then begin
-      case Parity of
-        'N': Par := NoneParity;
-        'E': Par := EvenParity;
-        'O': Par := OddParity;
-      end;
-      SerSetParams(FHandle, Baud, Bits, Par, StopBits, []);
       Result := True;
       FIsOpen := True;
+      Reconfigure(Baud, Bits, Parity, StopBits);
     end;
+  end;
+end;
+
+procedure TSimpleComPort.Reconfigure(Baud: Integer; Bits: Integer; Parity: Char; StopBits: Integer);
+var
+  Par: TParityType;
+begin
+  if IsOpen then begin
+    case Parity of
+      'N': Par := NoneParity;
+      'E': Par := EvenParity;
+      'O': Par := OddParity;
+    end;
+    SerSetParams(FHandle, Baud, Bits, Par, StopBits, []);
   end;
 end;
 
