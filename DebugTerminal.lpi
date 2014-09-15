@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="104"/>
+      <BuildNr Value="111"/>
       <StringTable CompanyName="Bernd Kreuss" FileDescription="serial terminal for embedded developmment" InternalName="DebugTerminal" OriginalFilename="DebugTerminal" ProductName="DebugTerminal" ProductVersion="1.0"/>
     </VersionInfo>
     <BuildModes Count="5">
@@ -197,7 +197,6 @@
       <Unit2>
         <Filename Value="debug.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Debug"/>
       </Unit2>
       <Unit3>
         <Filename Value="fconfigbutton.pas"/>

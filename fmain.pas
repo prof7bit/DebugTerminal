@@ -330,6 +330,7 @@ var
   sel: String;
 begin
   sel := CbPort.Text;
+  CbPort.Items.Clear;
   EnumerateSerialPorts(CbPort.Items);
   CbPort.Text := sel;
 end;
@@ -462,6 +463,7 @@ var
   B: TControl;
 begin
   History := THistory.Create(Self);
+  CbPort.Items.Clear;
   EnumerateSerialPorts(CbPort.Items);
   comport := TSimpleComPort.Create(self);
   IniProp.IniSection := 'Buttons';
