@@ -439,9 +439,6 @@ end;
 procedure TFormMain.CbBaudChange(Sender: TObject);
 begin
   IniWrite('Serial', 'Baud', CbBaud.Text);
-  if comport.IsOpen then begin
-    comport.Reconfigure(StrToInt(CbBaud.Text), 8, 'N', 2);
-  end;
 end;
 
 procedure TFormMain.CbEncodingRecvChange(Sender: TObject);

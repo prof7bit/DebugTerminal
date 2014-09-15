@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="56"/>
+      <BuildNr Value="104"/>
       <StringTable CompanyName="Bernd Kreuss" FileDescription="serial terminal for embedded developmment" InternalName="DebugTerminal" OriginalFilename="DebugTerminal" ProductName="DebugTerminal" ProductVersion="1.0"/>
     </VersionInfo>
     <BuildModes Count="5">
@@ -195,20 +195,21 @@
         <UnitName Value="FMain"/>
       </Unit1>
       <Unit2>
-        <Filename Value="comport_2.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="comport_2"/>
-      </Unit2>
-      <Unit3>
         <Filename Value="debug.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit3>
-      <Unit4>
+        <UnitName Value="Debug"/>
+      </Unit2>
+      <Unit3>
         <Filename Value="fconfigbutton.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FormConfigButton"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="comport.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ComPort"/>
       </Unit4>
     </Units>
   </ProjectOptions>
