@@ -21,7 +21,7 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage, comport_2,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage, comport,
   FConfigButton, LCLType, ExtCtrls, Spin, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
   TAChartUtils, Math;
 
@@ -148,7 +148,7 @@ type
     function IniReadInt(Section, Key: String; DefaultValue: Integer): Integer;
     procedure DoButtonAction(B: TButton);
   public
-    comport_2: TSimpleComPort;
+    comport: TSimpleComPort;
     RxLock: TCriticalSection;
     RxBuf: String;
     RxByteColumn: Integer;
@@ -439,8 +439,8 @@ end;
 procedure TFormMain.CbBaudChange(Sender: TObject);
 begin
   IniWrite('Serial', 'Baud', CbBaud.Text);
-  if comport_2.IsOpen then begin
-    comport_2.Reconfigure(StrToInt(CbBaud.Text), 8, 'N', 2);
+  if comport.IsOpen then begin
+    comport.Reconfigure(StrToInt(CbBaud.Text), 8, 'N', 2);
   end;
 end;
 
@@ -466,7 +466,7 @@ var
 begin
   History := THistory.Create(Self);
   EnumerateSerialPorts(CbPort.Items);
-  comport_2 := TSimpleComPort.Create(self);
+  comport := TSimpleComPort.Create(self);
   IniProp.IniSection := 'Buttons';
   for I := 0 to TsTerminal.ControlCount - 1 do begin
     B := TsTerminal.Controls[I];
@@ -506,10 +506,10 @@ end;
 procedure TFormMain.TbConnectChange(Sender: TObject);
 begin
   if TbConnect.Checked then begin
-    comport_2.Open(CbPort.Text, StrToInt(CbBaud.Text), 8, 'N', 2);
+    comport.Open(CbPort.Text, StrToInt(CbBaud.Text), 8, 'N', 2);
   end
   else begin
-    comport_2.Close;
+    comport.Close;
   end;
   UpdateConnectButton;
 end;
@@ -658,8 +658,8 @@ end;
 
 procedure TFormMain.UpdateConnectButton;
 begin
-  FInput.Enabled := comport_2.IsOpen;
-  if comport_2.IsOpen then begin
+  FInput.Enabled := comport.IsOpen;
+  if comport.IsOpen then begin
     TbConnect.State := cbChecked;
     TbConnect.Caption := 'Disconnect';
     FOutput.ExecuteCommand(ecEditorBottom, '', nil);
@@ -703,7 +703,7 @@ begin
   if HexToBin(PChar(S), Buf, L) = L then begin
     FOutput.ExecuteCommand(ecEditorBottom, '', nil);
     OutputLineBreak;
-    comport_2.Send(Buf^, L);
+    comport.Send(Buf^, L);
     Result := True;
   end;
   Freemem(Buf);
@@ -733,7 +733,7 @@ end;
 
 procedure TFormMain.DoButtonAction(B: TButton);
 begin
-  if comport_2.IsOpen then begin
+  if comport.IsOpen then begin
     SendHex(GetSequence(B));
   end;
 end;
