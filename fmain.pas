@@ -518,22 +518,24 @@ var
   C: Char;
   Buf: String;
 begin
-  RxLock.Acquire;
-  Buf := RxBuf;
-  SetLength(RxBuf, 0);
-  RxLock.Release;
-  Chart.DisableRedrawing;
-  Chart.DisableAutoSizing;
-  for C in Buf do begin
-    OutputPrepareAddByte(Ord(C));
-    PlotAddByte(Ord(C));
+  if comport.IsOpen then begin
+    RxLock.Acquire;
+    Buf := RxBuf;
+    SetLength(RxBuf, 0);
+    RxLock.Release;
+    Chart.DisableRedrawing;
+    Chart.DisableAutoSizing;
+    for C in Buf do begin
+      OutputPrepareAddByte(Ord(C));
+      PlotAddByte(Ord(C));
+    end;
+    FOutput.ExecuteCommand(ecEditorBottom, '', nil);
+    FOutput.InsertTextAtCaret(OutputNewText);
+    SetLength(OutputNewText, 0);
+    Chart.EnableAutoSizing;
+    Chart.EnableRedrawing;
+    PlotApplyZoom;
   end;
-  FOutput.ExecuteCommand(ecEditorBottom, '', nil);
-  FOutput.InsertTextAtCaret(OutputNewText);
-  SetLength(OutputNewText, 0);
-  Chart.EnableAutoSizing;
-  Chart.EnableRedrawing;
-  PlotApplyZoom;
 end;
 
 procedure TFormMain.FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
