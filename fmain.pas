@@ -23,7 +23,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, IniPropStorage, comport,
   FConfigButton, LCLType, ExtCtrls, Spin, SynEdit, SynEditKeyCmds, TAGraph, TASeries, syncobjs,
-  TAChartUtils, Math;
+  TAChartUtils, TATools, Math;
 
 const
   HISTSIZE = 100;
@@ -82,6 +82,11 @@ type
     Channel2: TLineSeries;
     Channel3: TLineSeries;
     Channel4: TLineSeries;
+    ChartToolset: TChartToolset;
+    ChartToolsetDataPointCrosshairTool1: TDataPointCrosshairTool;
+    ChartToolsetPanDragTool1: TPanDragTool;
+    ChartToolsetZoomDragTool1: TZoomDragTool;
+    ChartToolsetZoomMouseWheelTool1: TZoomMouseWheelTool;
     CheckBoxSigned: TCheckBox;
     IniProp: TIniPropStorage;
     FOutput: TSynEdit;
