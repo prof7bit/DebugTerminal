@@ -213,6 +213,7 @@ begin
         if GetLastError = ERROR_IO_PENDING then begin
           if WaitForSingleObject(Overlapped_read.hEvent, TimeoutMilli) = WAIT_OBJECT_0 then begin
             ReadFile(FHandle, RxBuf, SizeOf(RxBuf), RxBufLength, @Overlapped_read);
+            ResetEvent(Overlapped_read.hEvent);
           end;
         end;
       end;
@@ -336,4 +337,4 @@ end;
 
 {$endif unix}
 
-end.
+end.
