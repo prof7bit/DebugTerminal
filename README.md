@@ -26,7 +26,7 @@ every click. 16 bit data is expected to be sent in little endian format (least
 significant byte first).
 
 The terminal tab contains 8 speed buttons which can be configured to quickly
-send custom byte sequences with a simnple click of the mouse.
+send custom byte sequences with a simple click of the mouse.
 
 Hex input is case insensitive and whitespace is ignored. Received data can be
 displayed as hex, binary or decimal.
