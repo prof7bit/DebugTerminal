@@ -125,7 +125,7 @@ var
 begin
   Result := False;
   FHandle := CreateFile(
-    PChar(Port),
+    PChar('\\.\' + Port),
     GENERIC_READ or GENERIC_WRITE,
     0,
     nil,
@@ -337,4 +337,4 @@ end;
 
 {$endif unix}
 
-end.
+end.
