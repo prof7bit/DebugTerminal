@@ -139,6 +139,7 @@ type
     Receiver: TReceiver;
     History: THistory;
     OutputNewText: String;
+    AsciiPrevByte: Byte;
     procedure OutputPrepareAddByte(B: Byte);
     procedure OutputLineBreak;
     procedure PlotApplyZoom;
@@ -568,7 +569,7 @@ end;
 
 { Its not added to the text control directly,
   instead we first collect all the new bytes
-  in a string and then latter in a separate
+  in a string and then later in a separate
   method we add it all at once }
 procedure TFormMain.OutputPrepareAddByte(B: Byte);
 var
@@ -581,9 +582,11 @@ begin
     'Hex': S := IntToHex(B, 2) + ' ';
     'Dec': S := Format('%3d ', [B]);
     'ASCII': begin
+      if (B = 10) and (AsciiPrevByte = 13) then exit;
       S := Chr(B);
       L1 := 0;
       L2 := 200;
+      AsciiPrevByte := B;
     end;
     'Bin': begin
       S := ByteToBinary(B) + ' ';
@@ -593,9 +596,15 @@ begin
   end;
   OutputNewText += S;
   RxByteColumn += 1;
+
   if RxByteColumn = L1 then begin
     OutputNewText += '  ';
   end;
+
+  if (S = #13) or (S = #10) then begin
+    RxByteColumn := 0;
+  end;
+
   if RxByteColumn >= L2 then begin
     OutputNewText += LineEnding;
     RxByteColumn := 0;
