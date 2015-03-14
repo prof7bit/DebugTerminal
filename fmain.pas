@@ -559,6 +559,8 @@ begin
     if Res then begin
       History.Add(FInput.Text);
       FInput.Text := '';
+      FOutput.ExecuteCommand(ecEditorBottom, '', nil);
+      OutputLineBreak;
     end
   end;
 
@@ -725,8 +727,6 @@ begin
   L := Length(S) div 2;
   Getmem(Buf, L);
   if HexToBin(PChar(S), Buf, L) = L then begin
-    FOutput.ExecuteCommand(ecEditorBottom, '', nil);
-    OutputLineBreak;
     comport.Send(Buf^, L);
     Result := True;
   end;
