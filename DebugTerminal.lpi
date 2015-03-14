@@ -8,7 +8,7 @@
       <Title Value="DebugTerminal"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
-      <Icon Value="0"/>
+      <Icon Value="-1"/>
     </General>
     <i18n>
       <EnableI18N LFM="False"/>
@@ -17,8 +17,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <MinorVersionNr Value="5"/>
-      <BuildNr Value="9"/>
+      <MinorVersionNr Value="6"/>
+      <BuildNr Value="2"/>
       <StringTable CompanyName="Bernd Kreuss" FileDescription="serial terminal for embedded developmment" InternalName="DebugTerminal" OriginalFilename="DebugTerminal" ProductName="DebugTerminal" ProductVersion="1.5"/>
     </VersionInfo>
     <BuildModes Count="5">

@@ -149,6 +149,7 @@ type
     function GetSequence(AButton: TButton): String;
     procedure ConfigButton(AButton: TButton);
     function SendHex(S: String): Boolean;
+    function SendAscii(S: String): Boolean;
     procedure IniWrite(Section, Key, Value: String);
     function IniRead(Section, Key, DefaultValue: String): String;
     function IniReadInt(Section, Key: String; DefaultValue: Integer): Integer;
@@ -545,12 +546,20 @@ begin
 end;
 
 procedure TFormMain.FInputKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  Res: Boolean;
+  Enc: String;
 begin
   if Key = VK_RETURN then begin
-    if SendHex(FInput.Text) then begin
+    Enc := CbEncodingSend.Text;
+    if Pos('Hex', Enc) > 0 then
+      Res := SendHex(FInput.Text);
+    if Pos('ASCII', Enc) > 0 then
+      Res := SendAscii(FInput.Text);
+    if Res then begin
       History.Add(FInput.Text);
       FInput.Text := '';
-    end;
+    end
   end;
 
   if Key = VK_UP then begin
@@ -722,6 +731,16 @@ begin
     Result := True;
   end;
   Freemem(Buf);
+end;
+
+function TFormMain.SendAscii(S: String): Boolean;
+var Enc: String;
+begin
+  Enc := CbEncodingSend.Text;
+  if Pos('CR', Enc) > 0 then S += #13;
+  if Pos('LF', Enc) > 0 then S += #10;
+  comport.Send(S[1], Length(S));
+  Result := True;
 end;
 
 procedure TFormMain.IniWrite(Section, Key, Value: String);
