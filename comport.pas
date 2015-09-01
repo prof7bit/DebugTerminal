@@ -130,7 +130,7 @@ begin
     0,
     nil,
     OPEN_EXISTING,
-    FILE_ATTRIBUTE_NORMAL or FILE_FLAG_OVERLAPPED,
+    FILE_ATTRIBUTE_NORMAL,
     0);
 
   if FHandle <> INVALID_HANDLE_VALUE then begin
@@ -190,6 +190,9 @@ begin
   Result := Send(Text[1], Length(Text));
 end;
 
+(*
+      FUCK the overlapped IO, it just won't work with USB-Serial dongles :-(
+
 function TSimpleComPort.ReceiveByte(TimeoutMilli: Integer; out RecvByte: Byte): LongInt;
 var
   EvMask: DWORD;
@@ -229,6 +232,41 @@ begin
   end
   else
     Result := 0;
+end;
+*)
+
+function TSimpleComPort.ReceiveByte(TimeoutMilli: Integer; out RecvByte: Byte): LongInt;
+var
+  EndTime: TDateTime;
+
+begin
+  if RxBufNext = RxBufLength then begin
+    // Our RX buffer was empty, therefore now wait blocking for new data
+    // and try to read as many bytes into our buffer as there are available,
+    // so when the app asks for the next byte the next time we can just serve
+    // it from memory.
+    RxBufLength := 0;
+    RxBufNext := 0;
+
+    // Polling with sleep seems to be the only reliable way to implement
+    // a blocking read from the serial port on Windows.
+    EndTime := Now + TimeoutMilli / (24 * 60 * 60 * 1000);
+    repeat
+      RxBufLength := FileRead(FHandle, RxBuf, SizeOf(RxBuf));
+      if RxBufLength <> 0 then break;
+      if Now > EndTime then break;
+      Sleep(1);
+    until False
+  end;
+
+  if RxBufLength > RxBufNext then begin
+    RecvByte := RxBuf[RxBufNext];
+    inc(RxBufNext);
+    Result := 1;
+  end
+  else
+    Result := 0;
+
 end;
 
 procedure TSimpleComPort.Close;
