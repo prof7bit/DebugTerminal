@@ -518,6 +518,7 @@ begin
     comport.Close;
   end;
   UpdateConnectButton;
+  PlotDataByteCount := 0;
 end;
 
 procedure TFormMain.TimerTimer(Sender: TObject);
